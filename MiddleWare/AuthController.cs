@@ -7,6 +7,7 @@ using HackDemoAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using HackDemoAPI.Common;
 
 
 namespace HackDemoAPI.MiddleWare
@@ -26,14 +27,17 @@ namespace HackDemoAPI.MiddleWare
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel login)
         {
-            
-            if (login.Username == "admin" && login.Password == "password123")
+            // Retrieve the values using colon separation for nested keys
+            string? username = _config["ApiCredentials:Username"];
+            string? password = _config["ApiCredentials:Password"];
+
+            if (login.Username == username && login.Password == password)
             {
                 var token = GenerateJwtToken(login.Username);
                 return Ok(new { token = token });
             }
 
-            return Unauthorized("Invalid credentials.");
+            return Unauthorized(ValidationConstant.InvalidCrendentials);
         }
 
 
