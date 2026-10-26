@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using HackDemoAPI.Common;
 using Microsoft.AspNetCore.Mvc;
-using HackDemoAPI.Services;
-using HackDemoAPI.DTO;
+using HackDemoAPI.Application.DTO;
+using HackDemoAPI.Application.Interfaces;
 
-namespace HackDemoAPI.Controllers
+namespace HackDemoAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -20,9 +20,8 @@ namespace HackDemoAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string Email, string UserName, string Password)
         {
-            RegistrationDTO request = new RegistrationDTO();
-            request.Email = Email;
-            request.UserName = UserName;
+            LoginRequest request = new LoginRequest();
+            request.Email = Email;           
             request.Password = Password;
 
             var result= await _registrationService.RegisterUserAsync(request);

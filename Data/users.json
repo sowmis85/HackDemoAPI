@@ -1,0 +1,89 @@
+[
+  {
+    "userId": "USR1001",
+    "firstName": "Anand",
+    "lastName": "Kumar",
+    "email": "anand.kumar@example.test",
+    "role": "Attendee",
+    "interests": [
+      ".NET",
+      "Azure",
+      "Microservices"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR1002",
+    "firstName": "Divya",
+    "lastName": "Raghu",
+    "email": "divya.raghu@example.test",
+    "role": "Attendee",
+    "interests": [
+      "Angular",
+      "AI",
+      "Frontend"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR1003",
+    "firstName": "Suresh",
+    "lastName": "Kannan",
+    "email": "suresh.kannan@example.test",
+    "role": "Attendee",
+    "interests": [
+      "DevOps",
+      "Azure",
+      "Architecture"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR1004",
+    "firstName": "Lakshmi",
+    "lastName": "Narasimhan",
+    "email": "lakshmi.narasimhan@example.test",
+    "role": "Attendee",
+    "interests": [
+      "AI",
+      ".NET",
+      "Cloud"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR2001",
+    "firstName": "Rajesh",
+    "lastName": "Iyer",
+    "email": "rajesh.iyer@example.test",
+    "role": "Organizer",
+    "interests": [
+      "Cloud",
+      "DevOps",
+      "Events"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR2002",
+    "firstName": "Priya",
+    "lastName": "Krishnan",
+    "email": "priya.krishnan@example.test",
+    "role": "Organizer",
+    "interests": [
+      "AI",
+      "Architecture",
+      ".NET"
+    ],
+    "isActive": true
+  },
+  {
+    "userId": "USR3001",
+    "firstName": "System",
+    "lastName": "Administrator",
+    "email": "admin@smartevent.example.test",
+    "role": "Admin",
+    "interests": [],
+    "isActive": true
+  }
+]

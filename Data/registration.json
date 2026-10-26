@@ -1,0 +1,140 @@
+[
+  {
+    "registrationId": "REG1001",
+    "eventId": "EVT1001",
+    "userId": "USR1001",
+    "workflowInstanceId": "WF-REG1001",
+    "status": "Confirmed",
+    "attendeeCount": 2,
+    "attendees": [
+      {
+        "firstName": "Anand",
+        "lastName": "Kumar",
+        "email": "anand.kumar@example.test"
+      },
+      {
+        "firstName": "Arun",
+        "lastName": "Kumar",
+        "email": "arun.kumar@example.test"
+      }
+    ],
+    "waitlistPosition": null,
+    "requestedAt": "2026-10-24T10:15:00+05:30",
+    "confirmedAt": "2026-10-24T10:15:08+05:30",
+    "cancelledAt": null
+  },
+  {
+    "registrationId": "REG1002",
+    "eventId": "EVT1002",
+    "userId": "USR1002",
+    "workflowInstanceId": "WF-REG1002",
+    "status": "Confirmed",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Divya",
+        "lastName": "Ravi",
+        "email": "divya.ravi@example.test"
+      }
+    ],
+    "waitlistPosition": null,
+    "requestedAt": "2026-10-24T11:30:00+05:30",
+    "confirmedAt": "2026-10-24T11:30:06+05:30",
+    "cancelledAt": null
+  },
+  {
+    "registrationId": "REG1003",
+    "eventId": "EVT1003",
+    "userId": "USR1003",
+    "workflowInstanceId": "WF-REG1003",
+    "status": "Confirmed",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Suresh",
+        "lastName": "Kannan",
+        "email": "suresh.kannan@example.test"
+      }
+    ],
+    "waitlistPosition": null,
+    "requestedAt": "2026-10-25T09:00:00+05:30",
+    "confirmedAt": "2026-10-25T09:00:05+05:30",
+    "cancelledAt": null
+  },
+  {
+    "registrationId": "REG1004",
+    "eventId": "EVT1003",
+    "userId": "USR1004",
+    "workflowInstanceId": "WF-REG1004",
+    "status": "Waitlisted",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Lakshmi",
+        "lastName": "Narayanan",
+        "email": "lakshmi.n@example.test"
+      }
+    ],
+    "waitlistPosition": 1,
+    "requestedAt": "2026-10-25T09:00:01+05:30",
+    "confirmedAt": null,
+    "cancelledAt": null
+  },
+  {
+    "registrationId": "REG1005",
+    "eventId": "EVT1004",
+    "userId": "USR1001",
+    "workflowInstanceId": "WF-REG1005",
+    "status": "Requested",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Anand",
+        "lastName": "Kumar",
+        "email": "anand.kumar@example.test"
+      }
+    ],
+    "waitlistPosition": null,
+    "requestedAt": "2026-10-26T10:00:00+05:30",
+    "confirmedAt": null,
+    "cancelledAt": null
+  },
+  {
+    "registrationId": "REG1006",
+    "eventId": "EVT1005",
+    "userId": "USR1003",
+    "workflowInstanceId": "WF-REG1006",
+    "status": "Cancelled",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Suresh",
+        "lastName": "Kannan",
+        "email": "suresh.kannan@example.test"
+      }
+    ],
+    "waitlistPosition": null,
+    "requestedAt": "2026-09-25T14:20:00+05:30",
+    "confirmedAt": "2026-09-25T14:20:07+05:30",
+    "cancelledAt": "2026-10-01T09:45:00+05:30"
+  },
+  {
+    "registrationId": "REG1007",
+    "eventId": "EVT1006",
+    "userId": "USR1002",
+    "workflowInstanceId": "WF-REG1007",
+    "status": "Waitlisted",
+    "attendeeCount": 1,
+    "attendees": [
+      {
+        "firstName": "Divya",
+        "lastName": "Raghu",
+        "email": "divya.raghu@example.test"        
+      }
+    ],
+    "waitlistPosition": 1,
+    "requestedAt": "2026-10-26T11:30:00+05:30",
+    "confirmedAt": null,
+    "cancelledAt": null
+  }
+]
