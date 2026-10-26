@@ -1,4 +1,4 @@
-﻿namespace HackDemoAPI.MiddleWare
+﻿namespace HackDemoAPI.Domain.Exceptions
 {
     public class GlobalExceptionHandler
     {

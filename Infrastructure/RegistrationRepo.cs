@@ -1,4 +1,4 @@
-﻿namespace HackDemoAPI.Repositories
+﻿namespace HackDemoAPI.Infrastructure
 {
     public class RegistrationRepo
     {

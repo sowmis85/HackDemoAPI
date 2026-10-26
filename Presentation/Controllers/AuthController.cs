@@ -1,16 +1,17 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using HackDemoAPI.Application.DTO;
+using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Common;
+using HackDemoAPI.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using HackDemoAPI.MiddleWare;
-using HackDemoAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using HackDemoAPI.Common;
 
 
-namespace HackDemoAPI.MiddleWare
+namespace HackDemoAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -18,14 +19,16 @@ namespace HackDemoAPI.MiddleWare
     {
         //DI for configuration
         private readonly IConfiguration _config;
+        private readonly IAuthService _authService;
 
-        public AuthController(IConfiguration config)
+        public AuthController(IConfiguration config, IAuthService authService)
         {
             _config = config;
+            _authService = authService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel login)
+        public IActionResult Login([FromBody] Login login)
         {
             // Retrieve the values using colon separation for nested keys
             string? username = _config["ApiCredentials:Username"];
@@ -34,7 +37,7 @@ namespace HackDemoAPI.MiddleWare
             if (login.Username == username && login.Password == password)
             {
                 var token = GenerateJwtToken(login.Username);
-                return Ok(new { token = token });
+                return Ok(new { token });
             }
 
             return Unauthorized(ValidationConstant.InvalidCrendentials);
@@ -52,7 +55,7 @@ namespace HackDemoAPI.MiddleWare
             };
 
             // 2. Fetch keys from configuration
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _config["" + "Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // 3. Create Token Definition
@@ -66,6 +69,18 @@ namespace HackDemoAPI.MiddleWare
 
             // 4. Serialize into a string
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(
+     RegisterRequest request,
+     CancellationToken cancellationToken)
+        {
+            var result = await _authService.RegisterAsync(
+                request,
+                cancellationToken);
+
+            return Ok(result);
         }
     }
 }
