@@ -1,89 +1,24 @@
 [
   {
-    "userId": "USR1001",
-    "firstName": "Anand",
-    "lastName": "Kumar",
-    "email": "anand.kumar@example.test",
-    "role": "Attendee",
-    "interests": [
-      ".NET",
-      "Azure",
-      "Microservices"
-    ],
-    "isActive": true
+    "Id": "c3784b65-80f8-4d7c-a0e2-ba0984ac3b1e",
+    "FirstName": "adminss",
+    "LastName": "test",
+    "Email": "admin@smartevent.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAENq59zjnRSVsuZYwZhmjI7VmY7lV/H0VCca/y/XPu4pGaZQcmYhTMP0\u002Be4ySwlgd0A==",
+    "Role": "Admin",
+    "CreatedOnUtc": "0001-01-01T00:00:00",
+    "RefreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImU4ODJhYzk3LTE5YmItNDA2Yy04NTE4LWZlM2M2OGVmMzMyMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQHNtYXJ0ZXZlbnQudGVzdC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc5MzA5NTI5NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcwMDEifQ.C1OQYbDDFZn9AX4a3ZQ-Cd5VLmukH__ehBJrN__WK64",
+    "RefreshTokenExpiry": "2026-11-01T00:00:00Z"
   },
   {
-    "userId": "USR1002",
-    "firstName": "Divya",
-    "lastName": "Raghu",
-    "email": "divya.raghu@example.test",
-    "role": "Attendee",
-    "interests": [
-      "Angular",
-      "AI",
-      "Frontend"
-    ],
-    "isActive": true
-  },
-  {
-    "userId": "USR1003",
-    "firstName": "Suresh",
-    "lastName": "Kannan",
-    "email": "suresh.kannan@example.test",
-    "role": "Attendee",
-    "interests": [
-      "DevOps",
-      "Azure",
-      "Architecture"
-    ],
-    "isActive": true
-  },
-  {
-    "userId": "USR1004",
-    "firstName": "Lakshmi",
-    "lastName": "Narasimhan",
-    "email": "lakshmi.narasimhan@example.test",
-    "role": "Attendee",
-    "interests": [
-      "AI",
-      ".NET",
-      "Cloud"
-    ],
-    "isActive": true
-  },
-  {
-    "userId": "USR2001",
-    "firstName": "Rajesh",
-    "lastName": "Iyer",
-    "email": "rajesh.iyer@example.test",
-    "role": "Organizer",
-    "interests": [
-      "Cloud",
-      "DevOps",
-      "Events"
-    ],
-    "isActive": true
-  },
-  {
-    "userId": "USR2002",
-    "firstName": "Priya",
-    "lastName": "Krishnan",
-    "email": "priya.krishnan@example.test",
-    "role": "Organizer",
-    "interests": [
-      "AI",
-      "Architecture",
-      ".NET"
-    ],
-    "isActive": true
-  },
-  {
-    "userId": "USR3001",
-    "firstName": "System",
-    "lastName": "Administrator",
-    "email": "admin@smartevent.example.test",
-    "role": "Admin",
-    "interests": [],
-    "isActive": true
+    "Id": "e882ac97-19bb-406c-8518-fe3c68ef3320",
+    "FirstName": "admin",
+    "LastName": "smartevent",
+    "Email": "admin@smartevent.test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEDGPa7uPHd4K3BINc/qj5\u002BBHfEr38GMgspL8XcCTfa3LdzLVvG3QQHtuOaRC3Hhbpg==",
+    "Role": "Admin",
+    "CreatedOnUtc": "0001-01-01T00:00:00",
+    "RefreshToken": "1sD69DXeJ8cVWVFmSU\u002BpfivKj68yrTQjlN1j9cVKcMmPYuj11M/YDWRXD40xY7J2JQ2RbI3kwtd\u002BFC\u002B1s4jFyQ==",
+    "RefreshTokenExpiry": "2026-11-03T12:23:36.0381188Z"
   }
 ]

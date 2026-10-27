@@ -1,4 +1,4 @@
-﻿namespace HackDemoAPI.Application.DTO
+﻿namespace HackDemoAPI.Application.DTO.Requests
 {
     public class LoginRequest
     {

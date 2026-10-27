@@ -12,28 +12,20 @@ namespace HackDemoAPI.Infrastructure
      : IUserRepository
     {
         private readonly string _filePath;
+        private readonly IJsonFileHelper _jsonFileHelper;
 
-        public UserRepository(IWebHostEnvironment environment)
+        public UserRepository(IWebHostEnvironment environment, IJsonFileHelper jsonFileHelper)
         {
             _filePath = Path.Combine(
                 environment.ContentRootPath,
                 "Data",
                 "users.json");
+            _jsonFileHelper = jsonFileHelper;
         }
 
-        public async Task<User?> GetByEmailAsync(
-            string email,
-            CancellationToken cancellationToken)
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            if (!File.Exists(_filePath))
-                return null;
-
-            var json = await File.ReadAllTextAsync(
-                _filePath,
-                cancellationToken);
-
-            var users = JsonSerializer.Deserialize<List<User>>(json)
-                        ?? new List<User>();
+            var users = await _jsonFileHelper.ReadAsync<User>(_filePath, cancellationToken);
 
             return users.FirstOrDefault(x =>
                 x.Email.Equals(
@@ -41,9 +33,7 @@ namespace HackDemoAPI.Infrastructure
                     StringComparison.OrdinalIgnoreCase));
         }
 
-        public async Task<bool> EmailExistsAsync(
-            string email,
-            CancellationToken cancellationToken)
+        public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken)
         {
             var user = await GetByEmailAsync(
                 email,
@@ -52,35 +42,40 @@ namespace HackDemoAPI.Infrastructure
             return user != null;
         }
 
-        public async Task AddAsync(
-            User user,
-            CancellationToken cancellationToken)
-        {
-            List<User> users = new();
+        public async Task AddAsync(User user, CancellationToken cancellationToken)
+        {           
 
-            if (File.Exists(_filePath))
-            {
-                var json = await File.ReadAllTextAsync(
-                    _filePath,
-                    cancellationToken);
-
-                users = JsonSerializer.Deserialize<List<User>>(json)
-                        ?? new List<User>();
-            }
+           var users = await _jsonFileHelper.ReadAsync<User>(_filePath, cancellationToken);
 
             users.Add(user);
 
-            var updatedJson = JsonSerializer.Serialize(
-                users,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
+            await _jsonFileHelper.WriteAsync(_filePath, users, cancellationToken);
+        }
 
-            await File.WriteAllTextAsync(
-                _filePath,
-                updatedJson,
-                cancellationToken);
+        public async Task<User?> GetByRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        {
+            var users = await _jsonFileHelper.ReadAsync<User>(_filePath, cancellationToken);
+
+            return users.FirstOrDefault(x =>
+                x.RefreshToken == refreshToken);
+        }
+
+        public async Task UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            var users = await _jsonFileHelper.ReadAsync<User>(_filePath, cancellationToken);
+
+            var existingUser = users.FirstOrDefault(x =>
+                x.Id == user.Id);
+
+            if (existingUser == null)
+                return;
+            
+            existingUser.Email = user.Email;
+            existingUser.PasswordHash = user.PasswordHash;
+            existingUser.RefreshToken = user.RefreshToken;
+            existingUser.RefreshTokenExpiry = user.RefreshTokenExpiry;
+
+            await _jsonFileHelper.WriteAsync(_filePath, users, cancellationToken);
         }
     }
 }

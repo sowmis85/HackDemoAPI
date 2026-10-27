@@ -1,4 +1,4 @@
-﻿namespace HackDemoAPI.Application.DTO
+﻿namespace HackDemoAPI.Application.DTO.Responses
 {
     public sealed class AuthResponse
     {

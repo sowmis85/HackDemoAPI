@@ -1,6 +1,9 @@
-﻿using HackDemoAPI.Application.DTO;
+﻿using HackDemoAPI.Application.DTO.Requests;
+using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
+using HackDemoAPI.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 
 namespace HackDemoAPI.Application.Services
@@ -42,7 +45,8 @@ namespace HackDemoAPI.Application.Services
                 Email = request.Email,
                 PasswordHash =
                     _passwordHasher.Hash(request.Password),
-                Role = request.Role
+                Role = request.Role,
+                CreatedOnUtc = DateTime.UtcNow             
             };
 
             await _userRepository.AddAsync(
@@ -79,7 +83,51 @@ namespace HackDemoAPI.Application.Services
             return new LoginResponse
             {
                 AccessToken =
-                    _jwtGenerator.GenerateToken(user)
+                    _jwtGenerator.GenerateToken(user),
+                RefreshToken = _jwtGenerator.GenerateRefreshToken(),
+                ExpiresAt = DateTime.UtcNow.AddHours(2)
+            };
+        }
+
+        public async Task<LoginResponse> RefreshTokenAsync(
+       string refreshToken,
+       CancellationToken cancellationToken)
+        {
+            var user = await _userRepository
+                .GetByRefreshTokenAsync(
+                    refreshToken,
+                    cancellationToken);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException(
+                    ValidationConstant.InvalidRefreshToken);
+            }
+
+            if (user.RefreshTokenExpiry <= DateTime.UtcNow)
+            {
+                throw new UnauthorizedAccessException(
+                    "Refresh token expired.");
+            }
+
+            var newAccessToken =
+                _jwtGenerator.GenerateToken(user);
+
+            var newRefreshToken =
+                _jwtGenerator.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddHours(2);
+
+            await _userRepository.UpdateAsync(
+                user,
+                cancellationToken);
+
+            return new LoginResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddHours(2)
             };
         }
     }
