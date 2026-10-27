@@ -15,5 +15,13 @@ namespace HackDemoAPI.Application.Interfaces
         Task AddAsync(
             User user,
             CancellationToken cancellationToken);
+
+        Task<User?> GetByRefreshTokenAsync(
+       string refreshToken,
+       CancellationToken cancellationToken);
+
+        Task UpdateAsync(
+            User user,
+            CancellationToken cancellationToken);
     }
 }

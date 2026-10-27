@@ -3,275 +3,78 @@
     "eventId": "EVT1001",
     "title": "Azure Cloud & .NET Conference 2026",
     "description": "A conference covering modern .NET development, cloud-native architecture, Azure services and enterprise application design.",
-    "category": "Conference",
-    "tags": [
-      "Azure",
-      ".NET",
-      "Cloud",
-      "Microservices"
-    ],
+    "category": "Conference",    
     "startDate": "2026-11-15T09:00:00+05:30",
     "endDate": "2026-11-15T17:00:00+05:30",
     "status": "Published",
     "capacity": 100,
     "reservedSeats": 40,
     "availableSeats": 60,
-    "organizerId": "USR2001",
-    "venue": {
-      "venueId": "VEN001",
-      "name": "Chennai Convention Centre",
-      "address": "Chennai, Tamil Nadu",
-      "mode": "InPerson"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK001",
-        "name": "Arun Kumar",
-        "topic": "Building Cloud Native Applications with .NET"
-      },
-      {
-        "speakerId": "SPK002",
-        "name": "Priya Raman",
-        "topic": "Azure Architecture Best Practices"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "09:30",
-        "endTime": "10:30",
-        "title": "Modern .NET Architecture"
-      },
-      {
-        "startTime": "11:00",
-        "endTime": "12:00",
-        "title": "Azure Durable Functions"
-      }
-    ]
+    "organizerId": "USR2001"  
   },
   {
     "eventId": "EVT1002",
     "title": "Angular 21 Hands-on Workshop",
     "description": "A practical workshop covering Angular 21, standalone components, signals, typed forms and API integration.",
-    "category": "Workshop",
-    "tags": [
-      "Angular",
-      "TypeScript",
-      "Frontend",
-      "Web"
-    ],
+    "category": "Workshop",  
     "startDate": "2026-11-20T10:00:00+05:30",
     "endDate": "2026-11-20T16:00:00+05:30",
     "status": "Published",
     "capacity": 30,
     "reservedSeats": 22,
     "availableSeats": 8,
-    "organizerId": "USR2001",
-    "venue": {
-      "venueId": "VEN002",
-      "name": "Tech Learning Center",
-      "address": "OMR, Chennai, Tamil Nadu",
-      "mode": "InPerson"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK003",
-        "name": "Karthik S",
-        "topic": "Modern Angular Development"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "10:00",
-        "endTime": "12:00",
-        "title": "Angular 21 Fundamentals"
-      },
-      {
-        "startTime": "13:00",
-        "endTime": "16:00",
-        "title": "Hands-on Application Development"
-      }
-    ]
+    "organizerId": "USR2001"   
   },
   {
     "eventId": "EVT1003",
     "title": "AI Innovation Hackathon 2026",
     "description": "A one-day hackathon where teams build AI-powered solutions using .NET, Azure and modern AI services.",
-    "category": "Hackathon",
-    "tags": [
-      "AI",
-      "Azure",
-      "Hackathon",
-      ".NET"
-    ],
+    "category": "Hackathon",    
     "startDate": "2026-12-05T08:00:00+05:30",
     "endDate": "2026-12-05T20:00:00+05:30",
     "status": "Published",
     "capacity": 50,
     "reservedSeats": 49,
     "availableSeats": 1,
-    "organizerId": "USR2002",
-    "venue": {
-      "venueId": "VEN003",
-      "name": "Innovation Hub Chennai",
-      "address": "Guindy, Chennai, Tamil Nadu",
-      "mode": "InPerson"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK004",
-        "name": "Meena Raj",
-        "topic": "AI Solution Architecture"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "08:00",
-        "endTime": "09:00",
-        "title": "Team Registration"
-      },
-      {
-        "startTime": "09:00",
-        "endTime": "18:00",
-        "title": "Hackathon"
-      },
-      {
-        "startTime": "18:30",
-        "endTime": "20:00",
-        "title": "Demo and Results"
-      }
-    ]
+    "organizerId": "USR2002"  
   },
   {
     "eventId": "EVT1004",
     "title": "Microservices Architecture Webinar",
     "description": "An online technical session covering microservices, Clean Architecture, APIs, messaging and resilient cloud systems.",
-    "category": "Webinar",
-    "tags": [
-      "Microservices",
-      "Architecture",
-      ".NET",
-      "Azure"
-    ],
+    "category": "Webinar",    
     "startDate": "2026-11-28T18:00:00+05:30",
     "endDate": "2026-11-28T20:00:00+05:30",
     "status": "Published",
     "capacity": 200,
     "reservedSeats": 86,
     "availableSeats": 114,
-    "organizerId": "USR2002",
-    "venue": {
-      "venueId": "VEN004",
-      "name": "Online",
-      "address": "Virtual Event",
-      "mode": "Online"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK005",
-        "name": "Rahul Menon",
-        "topic": "Designing Resilient Microservices"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "18:00",
-        "endTime": "19:30",
-        "title": "Microservices Architecture"
-      },
-      {
-        "startTime": "19:30",
-        "endTime": "20:00",
-        "title": "Q&A"
-      }
-    ]
+    "organizerId": "USR2002"  
   },
   {
     "eventId": "EVT1005",
     "title": "DevOps & CI/CD Bootcamp",
     "description": "A practical bootcamp covering Azure DevOps repositories, YAML pipelines, environments, approvals and deployment strategies.",
-    "category": "Bootcamp",
-    "tags": [
-      "Azure DevOps",
-      "CI/CD",
-      "DevOps",
-      "YAML"
-    ],
+    "category": "Bootcamp",   
     "startDate": "2026-10-10T09:00:00+05:30",
     "endDate": "2026-10-10T17:00:00+05:30",
     "status": "Completed",
     "capacity": 40,
     "reservedSeats": 36,
     "availableSeats": 4,
-    "organizerId": "USR2001",
-    "venue": {
-      "venueId": "VEN005",
-      "name": "Chennai Technology Centre",
-      "address": "Sholinganallur, Chennai, Tamil Nadu",
-      "mode": "InPerson"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK006",
-        "name": "Deepak Rao",
-        "topic": "Enterprise CI/CD using Azure DevOps"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "09:00",
-        "endTime": "12:00",
-        "title": "CI/CD Fundamentals"
-      },
-      {
-        "startTime": "13:00",
-        "endTime": "17:00",
-        "title": "Azure Pipelines Hands-on"
-      }
-    ]
+    "organizerId": "USR2001"    
   },
   {
     "eventId": "EVT1006",
     "title": "Clean Architecture with .NET",
     "description": "Deep dive into Domain, Application, Infrastructure and API layers with practical Clean Architecture examples.",
-    "category": "Workshop",
-    "tags": [
-      ".NET",
-      "Clean Architecture",
-      "SOLID",
-      "DDD"
-    ],
+    "category": "Workshop",   
     "startDate": "2026-12-12T09:30:00+05:30",
     "endDate": "2026-12-12T16:30:00+05:30",
     "status": "Published",
     "capacity": 25,
     "reservedSeats": 25,
     "availableSeats": 0,
-    "organizerId": "USR2002",
-    "venue": {
-      "venueId": "VEN006",
-      "name": "Software Architecture Lab",
-      "address": "Tambaram, Chennai, Tamil Nadu",
-      "mode": "InPerson"
-    },
-    "speakers": [
-      {
-        "speakerId": "SPK007",
-        "name": "Vijay Anand",
-        "topic": "Clean Architecture and Domain Driven Design"
-      }
-    ],
-    "agenda": [
-      {
-        "startTime": "09:30",
-        "endTime": "12:30",
-        "title": "Clean Architecture"
-      },
-      {
-        "startTime": "13:30",
-        "endTime": "16:30",
-        "title": "SOLID and DDD Hands-on"
-      }
-    ]
+    "organizerId": "USR2002"   
   }
-
 ]

@@ -1,4 +1,4 @@
-﻿using HackDemoAPI.Application.DTO;
+﻿using HackDemoAPI.Application.DTO.Responses;
 using Microsoft.AspNetCore.Identity.Data;
 
 namespace HackDemoAPI.Application.Interfaces
@@ -6,11 +6,15 @@ namespace HackDemoAPI.Application.Interfaces
     public interface IAuthService
     {
         Task<AuthResponse> RegisterAsync(
-            DTO.RegisterRequest request,
+            DTO.Requests.RegisterRequest request,
             CancellationToken cancellationToken);
 
         Task<LoginResponse> LoginAsync(
-            DTO.LoginRequest request,
+            DTO.Requests.LoginRequest request,
             CancellationToken cancellationToken);
+
+        Task<LoginResponse> RefreshTokenAsync(
+       string refreshToken,
+       CancellationToken cancellationToken);
     }
 }

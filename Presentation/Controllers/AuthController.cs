@@ -1,4 +1,4 @@
-﻿using HackDemoAPI.Application.DTO;
+﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
@@ -28,57 +28,27 @@ namespace HackDemoAPI.Presentation.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] Login login)
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken)
         {
-            // Retrieve the values using colon separation for nested keys
-            string? username = _config["ApiCredentials:Username"];
-            string? password = _config["ApiCredentials:Password"];
-
-            if (login.Username == username && login.Password == password)
-            {
-                var token = GenerateJwtToken(login.Username);
-                return Ok(new { token });
-            }
-
-            return Unauthorized(ValidationConstant.InvalidCrendentials);
-        }
-
-
-        private string GenerateJwtToken(string username)
-        {
-            // 1. Define the User Claims
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, "Admin") // Optional role claim
-            };
-
-            // 2. Fetch keys from configuration
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _config["" + "Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            // 3. Create Token Definition
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(2), // Token lifetime
-                signingCredentials: creds
-            );
-
-            // 4. Serialize into a string
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+            var token = await _authService.LoginAsync(loginRequest, cancellationToken);             
+            return Ok(new { token });            
+        }      
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(
-     RegisterRequest request,
-     CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.RegisterAsync(
                 request,
                 cancellationToken);
+
+            return Ok(result);
+        }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
 
             return Ok(result);
         }
