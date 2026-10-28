@@ -1,4 +1,5 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
+using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,24 @@ namespace HackDemoAPI.Presentation.Controllers
             var result = await _eventService.GetEventsAsync(request, cancellationToken);
 
             return Ok(result);
+        }
+
+        [HttpGet("{eventId}")]
+        [ProducesResponseType(typeof(EventDetailsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetEventById(string eventId, CancellationToken cancellationToken)
+        {
+            var eventData = await _eventService.GetEventByIdAsync(eventId, cancellationToken);
+
+            if (eventData == null)
+            {
+                return NotFound(new
+                {
+                    Message = $"Event '{eventId}' not found."
+                });
+            }
+
+            return Ok(eventData);
         }
     }
 }

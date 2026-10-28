@@ -43,13 +43,13 @@
             if (request.StartDate.HasValue)
             {
                 query = query.Where(x =>
-                    x.StartDate >= request.StartDate.Value);
+                    x.StartDate >= request.StartDate.Value.Date);
             }
 
             if (request.EndDate.HasValue)
             {
-                query = query.Where(x =>
-                    x.EndDate <= request.EndDate.Value);
+               // var endDate = request.EndDate.Value.Date.AddDays(1);
+                query = query.Where(x => x.EndDate.Date <= request.EndDate.Value.Date);
             }
 
             // Sorting
@@ -78,7 +78,12 @@
                     Description = x.Description,
                     Category = x.Category,
                     StartDate = x.StartDate,
-                    Capacity = x.Capacity                   
+                    Capacity = x.Capacity,
+                    EndDate=x.EndDate,
+                    ReservedSeats = x.ReservedSeats,
+                    Status = x.Status,
+                    AvailableSeats= x.AvailableSeats,
+                    OrganizerId = x.OrganizerId
                 })
                 .ToList();
 
@@ -91,6 +96,16 @@
                 TotalPages = (int)Math.Ceiling(
                     totalRecords / (double)request.PageSize)
             };
+        }
+
+        public async Task<Event?> GetByIdAsync(string eventId, CancellationToken cancellationToken)
+        {
+
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            return events.FirstOrDefault(x =>
+                x.EventId.Equals(eventId,
+                    StringComparison.OrdinalIgnoreCase));
         }
     }
 }
