@@ -9,5 +9,13 @@ namespace HackDemoAPI.Application.Interfaces
         Task<EventListResponse> GetEventsAsync(EventSearchRequest request, CancellationToken cancellationToken);
 
         Task<Event?> GetByIdAsync(string eventId, CancellationToken cancellationToken);
+
+        Task CreateEventAsync(Event eventItem, CancellationToken cancellationToken);
+
+        Task<List<Event>> GetAllAsync(CancellationToken cancellationToken);
+
+        Task UpdateAsync(Event eventItem, CancellationToken cancellationToken);
+
+        Task DeleteAsync(string eventId, CancellationToken cancellationToken);
     }
 }

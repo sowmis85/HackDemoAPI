@@ -1,7 +1,9 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HackDemoAPI.Presentation.Controllers
 {
@@ -41,6 +43,36 @@ namespace HackDemoAPI.Presentation.Controllers
             }
 
             return Ok(eventData);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin,Organizer")]
+        public async Task<IActionResult> Create(CRUDEventRequest request, CancellationToken cancellationToken)
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value
+                        ?? User.FindFirst("email")?.Value
+                        ?? "Unknown";
+
+            var response = await _eventService.CreateAsync(request, email, cancellationToken);
+
+            return Created($"/api/events/{response.EventId}", response);
+        }
+
+        [HttpPut("{eventId}")]
+        [Authorize(Roles = "Admin,Organizer")]
+        public async Task<IActionResult> Update(string eventId, [FromBody] CRUDEventRequest request, CancellationToken cancellationToken)
+        {
+            var response = await _eventService.UpdateAsync(eventId, request, cancellationToken);
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{eventId}")]
+        [Authorize(Roles = "Admin,Organizer")]
+        public async Task<IActionResult> Delete(string eventId, CancellationToken cancellationToken)
+        {
+            var response = await _eventService.DeleteAsync(eventId, cancellationToken);
+
+            return Ok(response);
         }
     }
 }

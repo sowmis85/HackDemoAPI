@@ -1,17 +1,19 @@
 [
   {
     "EventId": "EVT1001",
-    "Title": "Azure Cloud & .NET Conference 2026",
-    "Description": "A conference covering modern .NET development, cloud-native architecture, Azure services and enterprise application design.",
+    "Title": "Azure Cloud .NET Conference 2026",
+    "Description": "Latest Azure conference for the year 2026",
     "Category": "Conference",
-    "StartDate": "2026-11-15T09:00:00+05:30",
-    "EndDate": "2026-11-15T17:00:00+05:30",
+    "StartDate": "2026-12-20T10:00:00+05:30",
+    "EndDate": "2026-12-20T12:00:00+05:30",
     "Status": "Published",
-    "Capacity": 100,
-    "reservedSeats": 40,
-    "availableSeats": 60,
-    "organizerId": "USR2001"
-  },  
+    "Capacity": 200,
+    "ReservedSeats": 0,
+    "AvailableSeats": 100,
+    "OrganizerId": "",
+    "CreatedDate": "2026-11-15T09:00:00+05:30",
+    "CreatedBy": "admin@smartevent.test.com"
+  },
   {
     "EventId": "EVT1002",
     "Title": "Clean Architecture with .NET",
@@ -23,6 +25,8 @@
     "Capacity": 25,
     "ReservedSeats": 25,
     "AvailableSeats": 0,
-    "OrganizerId": "USR2002"
+    "OrganizerId": "USR2002",
+    "CreatedDate": "2026-12-12T09:30:00+05:30",
+    "CreatedBy": "admin@smartevent.test.com"
   }
 ]

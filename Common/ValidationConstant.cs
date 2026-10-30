@@ -6,5 +6,8 @@
         public const string? InvalidCrendentials = "Invalid credentials.";
         public const string? InvalidRefreshToken = "Invalid refresh token.";
         public const string? RefreshTokenExpired = "Refresh token expired.";
+        public const string? EventCreated = "Event created successfully.";
+        public const string? EventUpdated = "Event updated successfully.";
+        public const string? EventDeleted = "Event deleted successfully.";
     }
 }

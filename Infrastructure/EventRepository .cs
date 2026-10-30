@@ -107,5 +107,70 @@
                 x.EventId.Equals(eventId,
                     StringComparison.OrdinalIgnoreCase));
         }
+
+        public async Task<List<Event>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            return events.ToList();
+        }
+
+        public async Task CreateEventAsync(Event eventItem, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            events.Add(eventItem);
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
+        }
+        public async Task UpdateAsync(Event eventItem, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x =>
+                x.EventId == eventItem.EventId);
+
+            if (existingEvent is null)
+            {
+                throw new KeyNotFoundException(
+                    "Event not found");
+            }
+
+            existingEvent.Title = eventItem.Title;
+            existingEvent.Description = eventItem.Description;
+            existingEvent.Category = eventItem.Category;
+            existingEvent.StartDate = eventItem.StartDate;
+            existingEvent.EndDate = eventItem.EndDate;
+            existingEvent.Capacity = eventItem.Capacity;
+            existingEvent.AvailableSeats = eventItem.AvailableSeats;
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
+        }
+        public async Task DeleteAsync(string eventId, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventId,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (existingEvent is null)
+            {
+                throw new KeyNotFoundException(
+                    $"Event '{eventId}' not found.");
+            }
+
+            events.Remove(existingEvent);
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
+        }
     }
 }
