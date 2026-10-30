@@ -43,13 +43,13 @@
             if (request.StartDate.HasValue)
             {
                 query = query.Where(x =>
-                    x.StartDate >= request.StartDate.Value);
+                    x.StartDate >= request.StartDate.Value.Date);
             }
 
             if (request.EndDate.HasValue)
             {
-                query = query.Where(x =>
-                    x.EndDate <= request.EndDate.Value);
+               // var endDate = request.EndDate.Value.Date.AddDays(1);
+                query = query.Where(x => x.EndDate.Date <= request.EndDate.Value.Date);
             }
 
             // Sorting
@@ -78,7 +78,12 @@
                     Description = x.Description,
                     Category = x.Category,
                     StartDate = x.StartDate,
-                    Capacity = x.Capacity                   
+                    Capacity = x.Capacity,
+                    EndDate=x.EndDate,
+                    ReservedSeats = x.ReservedSeats,
+                    Status = x.Status,
+                    AvailableSeats= x.AvailableSeats,
+                    OrganizerId = x.OrganizerId
                 })
                 .ToList();
 
@@ -91,6 +96,81 @@
                 TotalPages = (int)Math.Ceiling(
                     totalRecords / (double)request.PageSize)
             };
+        }
+
+        public async Task<Event?> GetByIdAsync(string eventId, CancellationToken cancellationToken)
+        {
+
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            return events.FirstOrDefault(x =>
+                x.EventId.Equals(eventId,
+                    StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<List<Event>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            return events.ToList();
+        }
+
+        public async Task CreateEventAsync(Event eventItem, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            events.Add(eventItem);
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
+        }
+        public async Task UpdateAsync(Event eventItem, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x =>
+                x.EventId == eventItem.EventId);
+
+            if (existingEvent is null)
+            {
+                throw new KeyNotFoundException(
+                    "Event not found");
+            }
+
+            existingEvent.Title = eventItem.Title;
+            existingEvent.Description = eventItem.Description;
+            existingEvent.Category = eventItem.Category;
+            existingEvent.StartDate = eventItem.StartDate;
+            existingEvent.EndDate = eventItem.EndDate;
+            existingEvent.Capacity = eventItem.Capacity;
+            existingEvent.AvailableSeats = eventItem.AvailableSeats;
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
+        }
+        public async Task DeleteAsync(string eventId, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventId,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (existingEvent is null)
+            {
+                throw new KeyNotFoundException(
+                    $"Event '{eventId}' not found.");
+            }
+
+            events.Remove(existingEvent);
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                events,
+                cancellationToken);
         }
     }
 }

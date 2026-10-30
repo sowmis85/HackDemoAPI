@@ -107,7 +107,7 @@ namespace HackDemoAPI.Application.Services
             if (user.RefreshTokenExpiry <= DateTime.UtcNow)
             {
                 throw new UnauthorizedAccessException(
-                    "Refresh token expired.");
+                   ValidationConstant.RefreshTokenExpired);
             }
 
             var newAccessToken =
