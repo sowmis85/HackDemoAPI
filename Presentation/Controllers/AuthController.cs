@@ -1,5 +1,5 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
-using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +35,7 @@ namespace HackDemoAPI.Presentation.Controllers
         }      
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(UserRegisterRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.RegisterAsync(
                 request,

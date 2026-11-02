@@ -1,6 +1,6 @@
 ﻿namespace HackDemoAPI.Application.DTO.Requests
 {
-    public sealed class RegisterRequest
+    public sealed class UserRegisterRequest
     {
         public string FirstName { get; set; } = string.Empty;
 

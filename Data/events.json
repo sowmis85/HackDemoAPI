@@ -10,7 +10,7 @@
     "Capacity": 200,
     "ReservedSeats": 0,
     "AvailableSeats": 100,
-    "OrganizerId": "",
+    "OrganizerId": "USR2001",
     "CreatedDate": "2026-11-15T09:00:00+05:30",
     "CreatedBy": "admin@smartevent.test.com"
   },
