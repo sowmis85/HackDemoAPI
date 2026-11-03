@@ -17,6 +17,7 @@
         public const string NoSeatsAvailable = "No Seats Available";
         public const string ReservationNotFound = "Reservation Not Found";
         public const string WorkflowNotFound = "Workflow Not Found";
+        public const string InternalServerError = "Internal Server Error";
 
         public static readonly string RELEASE = "RELEASE";
         public static readonly string RESERVE = "RESERVE";

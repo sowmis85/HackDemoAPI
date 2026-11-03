@@ -7,6 +7,7 @@ using HackDemoAPI.Application.Interfaces.Services;
 using HackDemoAPI.Application.Services;
 using HackDemoAPI.Common;
 using HackDemoAPI.Infrastructure;
+using HackDemoAPI.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -51,6 +52,7 @@ builder.Services.AddLogging(options =>
     options.AddDebug();
     // Consider Serilog for production
 });
+
 //Service registrations
 builder.Services.AddHttpClient<IAIService, AzureOpenAIService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -79,6 +81,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

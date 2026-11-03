@@ -1,5 +1,6 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Application.Interfaces.Repositories;
@@ -7,6 +8,7 @@ using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using HackDemoAPI.Infrastructure;
 using System.ComponentModel.DataAnnotations;
+using ValidationException = HackDemoAPI.Application.Exceptions.ValidationException;
 
 namespace HackDemoAPI.Application.Services
 {
@@ -96,40 +98,40 @@ namespace HackDemoAPI.Application.Services
         {
             if (string.IsNullOrWhiteSpace(eventId))
             {
-                throw new Exception(RegValidation.EventIdRequired);
+                throw new ValidationException(RegValidation.EventIdRequired);
             }
 
             if (string.IsNullOrWhiteSpace(request.AttendeeName))
             {
-                throw new Exception(RegValidation.AttendeeNameRequired);
+                throw new ValidationException(RegValidation.AttendeeNameRequired);
             }
 
             if (string.IsNullOrWhiteSpace(request.AttendeeEmail))
             {
-                throw new Exception(RegValidation.AttendeeEmailRequired);
+                throw new ValidationException(RegValidation.AttendeeEmailRequired);
             }
 
             if (!new EmailAddressAttribute()
                     .IsValid(request.AttendeeEmail))
             {
-                throw new Exception(RegValidation.InvalidEmail);
+                throw new ValidationException(RegValidation.InvalidEmail);
             }
 
             if (request.Quantity <= 0)
             {
-                throw new Exception(RegValidation.InvalidQuantity);
+                throw new ValidationException(RegValidation.InvalidQuantity);
             }
 
             var eventEntity = await _eventRepository.GetByIdAsync(eventId, cancellationToken);
 
             if (eventEntity == null)
             {
-                throw new Exception(ValidationConstant.EventNotFound);
+                throw new NotFoundException(ValidationConstant.EventNotFound);
             }
 
             if (eventEntity.Status != EventStatus.Published.ToString())
             {
-                throw new Exception(RegValidation.EventNotOpenForRegistration);
+                throw new ValidationException(RegValidation.EventNotOpenForRegistration);
             }
 
             var existingRegistration =
@@ -140,7 +142,7 @@ namespace HackDemoAPI.Application.Services
 
             if (existingRegistration != null)
             {       
-                throw new Exception(
+                throw new ValidationException(
                     RegValidation.AlreadyRegisteredForEvent);
             }
         }
@@ -154,7 +156,7 @@ namespace HackDemoAPI.Application.Services
 
             if (registration == null)
             {
-                throw new Exception(RegValidation.RegistrationNotFound);
+                throw new ValidationException(RegValidation.RegistrationNotFound);
             }
 
             return new EventRegistrationResponse
@@ -177,12 +179,12 @@ namespace HackDemoAPI.Application.Services
 
             if (registration == null)
             {
-                throw new Exception(RegValidation.RegistrationNotFound);
+                throw new ValidationException(RegValidation.RegistrationNotFound);
             }
 
             if (registration.Status == RegistrationStatus.Cancelled.ToString())
             {
-                throw new Exception(RegValidation.RegistrationAlreadyCancelled);
+                throw new ValidationException(RegValidation.RegistrationAlreadyCancelled);
             }
 
             string idempotentKey = registration.RegistrationId + "-RESERVE";

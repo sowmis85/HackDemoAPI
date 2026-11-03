@@ -1,5 +1,6 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
@@ -33,7 +34,7 @@ namespace HackDemoAPI.Application.Services
             var availableSeats = eventEntity.Capacity - eventEntity.ReservedSeats;
 
             if (availableSeats < request.Quantity)
-                throw new Exception(ValidationConstant.NoSeatsAvailable);
+                throw new ValidationException(ValidationConstant.NoSeatsAvailable);
 
             eventEntity.ReservedSeats += request.Quantity;
 
@@ -100,7 +101,7 @@ namespace HackDemoAPI.Application.Services
             //Only for release this condition can be validated
             if (operation.Equals(ValidationConstant.RELEASE) && existingRecord == null)
             {
-                throw new Exception(
+                throw new NotFoundException(
                     ValidationConstant.ReservationNotFound);
             }
             //For the same purpose of operation, validation should say already processed
@@ -121,7 +122,7 @@ namespace HackDemoAPI.Application.Services
 
             if (eventEntity == null)
             {
-                throw new Exception(ValidationConstant.EventNotFound);
+                throw new NotFoundException(ValidationConstant.EventNotFound);
             }
 
             return new SeatOperationContext

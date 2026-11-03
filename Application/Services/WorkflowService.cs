@@ -1,4 +1,5 @@
 ﻿using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces.Repositories;
 using HackDemoAPI.Application.Interfaces.Services;
 using HackDemoAPI.Common;
@@ -24,7 +25,7 @@ namespace HackDemoAPI.Application.Services
 
             if (workflow == null)
             {
-                throw new Exception(ValidationConstant.WorkflowNotFound);
+                throw new NotFoundException(ValidationConstant.WorkflowNotFound);
             }
 
             return new WorkflowStatusResponse

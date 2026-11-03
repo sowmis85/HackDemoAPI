@@ -4,6 +4,7 @@
     using Domain.Entities;
     using HackDemoAPI.Application.DTO.Events;
     using HackDemoAPI.Application.DTO.Requests;
+    using HackDemoAPI.Application.Exceptions;
     using HackDemoAPI.Application.Interfaces.IRepository;
     using HackDemoAPI.Common;
     using Microsoft.Extensions.Logging;
@@ -136,7 +137,7 @@
 
             if (existingEvent is null)
             {
-                throw new KeyNotFoundException(ValidationConstant.EventNotFound);
+                throw new NotFoundException(ValidationConstant.EventNotFound);
             }
 
             existingEvent.Title = eventItem.Title;
