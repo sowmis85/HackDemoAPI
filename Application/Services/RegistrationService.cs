@@ -2,6 +2,7 @@
 using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
+using HackDemoAPI.Application.Interfaces.Repositories;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using HackDemoAPI.Infrastructure;
@@ -13,14 +14,16 @@ namespace HackDemoAPI.Application.Services
     {
         private readonly IRegistrationRepository _registrationRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly IWorkflowRepository _workflowRepository;
         private readonly ISeatService _seatService;
 
         public RegistrationService(
-            IRegistrationRepository registrationRepository, IEventRepository eventRepository, ISeatService seatService)
+            IRegistrationRepository registrationRepository, IEventRepository eventRepository, IWorkflowRepository workflowRepository, ISeatService seatService)
         {
             _registrationRepository = registrationRepository;
             _eventRepository = eventRepository;
             _seatService = seatService;
+            _workflowRepository = workflowRepository;
         }
 
         public async Task<EventRegistrationResponse> RegisterAsync(string eventId, EventRegistrationRequest request, CancellationToken cancellationToken)
@@ -45,7 +48,7 @@ namespace HackDemoAPI.Application.Services
                     Quantity = request.Quantity
                 },
                 cancellationToken);
-
+            //registration creation
             var registration = new Registration
             {
                 RegistrationId = registrationId,
@@ -62,10 +65,29 @@ namespace HackDemoAPI.Application.Services
                 registration,
                 cancellationToken);
 
+            //workflow creation
+            var workflow = new WorkflowInstance
+            {
+                WorkflowInstanceId = workflowInstanceId,
+                RegistrationId = registrationId,
+                CurrentState = WorkflowState.Started,
+                StartedOn = DateTime.UtcNow,
+                LastUpdatedOn = DateTime.UtcNow
+            };
+
+            await _workflowRepository.CreateAsync(
+                workflow,
+                cancellationToken);
+
             return new EventRegistrationResponse
             {
                 RegistrationId = registrationId,
                 WorkflowInstanceId = workflowInstanceId,
+                EventId = eventId,
+                AttendeeName = registration.AttendeeName,
+                AttendeeEmail = registration.AttendeeEmail,
+                Quantity = registration.Quantity,
+                CreatedOn=registration.CreatedOn,
                 Status = "Pending"
             };
         }

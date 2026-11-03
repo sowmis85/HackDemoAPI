@@ -2,6 +2,8 @@
 using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
+using HackDemoAPI.Application.Interfaces.Repositories;
+using HackDemoAPI.Application.Interfaces.Services;
 using HackDemoAPI.Application.Services;
 using HackDemoAPI.Common;
 using HackDemoAPI.Infrastructure;
@@ -55,6 +57,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
 //Repository registrations
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
@@ -62,6 +65,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
+builder.Services.AddScoped<IWorkflowRepository, WorkflowRepository>();
 //Helper
 builder.Services.AddSingleton<IJsonFileHelper, JsonFileHelper>();
 
