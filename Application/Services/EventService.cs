@@ -1,7 +1,8 @@
 ﻿using HackDemoAPI.Application.DTO.Events;
 using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
-using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
+using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using HackDemoAPI.Infrastructure;
@@ -78,8 +79,7 @@ namespace HackDemoAPI.Application.Services
 
             if (existingEvent is null)
             {
-                throw new KeyNotFoundException(
-                    $"Event '{eventId}' not found.");
+                throw new KeyNotFoundException($"Event '{eventId}' not found.");
             }
 
             existingEvent.Title = request.Title;
@@ -88,15 +88,10 @@ namespace HackDemoAPI.Application.Services
             existingEvent.StartDate = request.StartDate;
             existingEvent.EndDate = request.EndDate;
 
-            var bookedSeats =
-                existingEvent.Capacity -
-                existingEvent.AvailableSeats;
-
+            var bookedSeats = existingEvent.Capacity - existingEvent.AvailableSeats;
             existingEvent.Capacity = request.Capacity;
-
-            existingEvent.AvailableSeats =
-                request.Capacity - bookedSeats;
-
+            existingEvent.AvailableSeats = request.Capacity - bookedSeats;
+           
             await _repository.UpdateAsync(existingEvent, cancellationToken);
 
             return new CRUDEventResponse

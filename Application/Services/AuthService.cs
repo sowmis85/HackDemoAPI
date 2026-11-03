@@ -1,6 +1,8 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
+using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using HackDemoAPI.Infrastructure;
@@ -25,7 +27,7 @@ namespace HackDemoAPI.Application.Services
         }
 
         public async Task<AuthResponse> RegisterAsync(
-            RegisterRequest request,
+            UserRegisterRequest request,
             CancellationToken cancellationToken)
         {
             var exists = await _userRepository
