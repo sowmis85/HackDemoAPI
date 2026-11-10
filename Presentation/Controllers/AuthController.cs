@@ -40,8 +40,8 @@ namespace HackDemoAPI.Presentation.Controllers
                     return BadRequest(new LoginResponse
                     {
                         Success = false,
-                        Message = errors ?? "Invalid login request",
-                        ErrorCode = "VALIDATION_ERROR"
+                        Message = errors ?? ValidationConstant.InvalidCrendentials,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
                     });
                 }
 
@@ -53,7 +53,7 @@ namespace HackDemoAPI.Presentation.Controllers
                     RefreshToken = token.RefreshToken,
                     ExpiresAt = token.ExpiresAt,
                     Success = true,
-                    Message = "Login successful"
+                    Message = ValidationConstant.LoginSuccessMessage
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -63,29 +63,29 @@ namespace HackDemoAPI.Presentation.Controllers
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "UNAUTHORIZED"
+                    ErrorCode = ValidationConstant.UNAUTHORIZED
                 });
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning($"Validation error during login: {ex.Message}");
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
                 return BadRequest(new LoginResponse
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "VALIDATION_ERROR"
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error during login: {ex.Message}");
+                _logger.LogError(ValidationConstant.UnExpectedError + ": " + ex.Message);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     new LoginResponse
                     {
                         Success = false,
-                        Message = "An unexpected error occurred during login",
-                        ErrorCode = "INTERNAL_SERVER_ERROR"
+                        Message = ValidationConstant.UnExpectedError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
                     });
             }
         }
@@ -109,8 +109,8 @@ namespace HackDemoAPI.Presentation.Controllers
                     return BadRequest(new AuthResponse
                     {
                         Success = false,
-                        Message = errors ?? "Invalid registration request",
-                        ErrorCode = "VALIDATION_ERROR"
+                        Message = errors ?? ValidationConstant.InvalidLoginRequest,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
                     });
                 }
 
@@ -125,34 +125,34 @@ namespace HackDemoAPI.Presentation.Controllers
             }
             catch (ApplicationException ex)
             {
-                _logger.LogWarning($"Registration failed: {ex.Message}");
+                _logger.LogWarning(ValidationConstant.EmailExistsError + ": " + ex.Message);
                 return Conflict(new AuthResponse
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "EMAIL_EXISTS"
+                    ErrorCode = ValidationConstant.EMAIL_EXISTS
                 });
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning($"Validation error during registration: {ex.Message}");
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
                 return BadRequest(new AuthResponse
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "VALIDATION_ERROR"
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error during registration: {ex.Message}");
+                _logger.LogError(ValidationConstant.UnExpectedRegistrationError + ": " + ex.Message);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     new AuthResponse
                     {
                         Success = false,
-                        Message = "An unexpected error occurred during registration",
-                        ErrorCode = "INTERNAL_SERVER_ERROR"
+                        Message = ValidationConstant.UnExpectedRegistrationError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
                     });
             }
         }
@@ -173,8 +173,8 @@ namespace HackDemoAPI.Presentation.Controllers
                     return BadRequest(new LoginResponse
                     {
                         Success = false,
-                        Message = "Refresh token is required",
-                        ErrorCode = "MISSING_REFRESH_TOKEN"
+                        Message = ValidationConstant.MissingRefreshToken,
+                        ErrorCode = ValidationConstant.MISSING_REFRESH_TOKEN
                     });
                 }
 
@@ -186,39 +186,39 @@ namespace HackDemoAPI.Presentation.Controllers
                     RefreshToken = result.RefreshToken,
                     ExpiresAt = result.ExpiresAt,
                     Success = true,
-                    Message = "Token refreshed successfully"
+                    Message = ValidationConstant.TokenRefreshSuccess
                 });
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogWarning($"Refresh token failed: {ex.Message}");
+                _logger.LogWarning(ValidationConstant.UnExprectedRefreshError + ": " + ex.Message);
                 return Unauthorized(new LoginResponse
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "INVALID_REFRESH_TOKEN"
+                    ErrorCode = ValidationConstant.INVALID_REFRESH_TOKEN
                 });
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning($"Validation error during token refresh: {ex.Message}");
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
                 return BadRequest(new LoginResponse
                 {
                     Success = false,
                     Message = ex.Message,
-                    ErrorCode = "VALIDATION_ERROR"
+                    ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error during token refresh: {ex.Message}");
+                _logger.LogError(ValidationConstant.UnExprectedRefreshError + ": " + ex.Message);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     new LoginResponse
                     {
                         Success = false,
-                        Message = "An unexpected error occurred during token refresh",
-                        ErrorCode = "INTERNAL_SERVER_ERROR"
+                        Message = ValidationConstant.UnExprectedRefreshError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
                     });
             }
         }
