@@ -1,10 +1,12 @@
-﻿namespace HackDemoAPI.Common
+﻿using System.Runtime.CompilerServices;
+
+namespace HackDemoAPI.Common
 {
     public static class ValidationConstant
     {
         public const string JWTConfigValidation = "JWT configuration is not complete. Please check appsettings.json";
         public const string UserRegistrationSuccess = "User registered successfully!";
-        public const string InvalidCrendentials = "Invalid credentials.";
+        public const string InvalidCrendentials = "Invalid login credentials.";
         public const string InvalidRefreshToken = "Invalid refresh token.";
         public const string RefreshTokenExpired = "Refresh token expired.";
         public const string EventCreated = "Event created successfully.";
@@ -18,6 +20,7 @@
         public const string ReservationNotFound = "Reservation Not Found";
         public const string WorkflowNotFound = "Workflow Not Found";
         public const string InternalServerError = "Internal Server Error";
+        public const string EmailExistsError = "Email already exists";
 
         public static readonly string RELEASE = "RELEASE";
         public static readonly string RESERVE = "RESERVE";

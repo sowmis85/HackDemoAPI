@@ -20,5 +20,16 @@
     "CreatedOnUtc": "0001-01-01T00:00:00",
     "RefreshToken": "1sD69DXeJ8cVWVFmSU\u002BpfivKj68yrTQjlN1j9cVKcMmPYuj11M/YDWRXD40xY7J2JQ2RbI3kwtd\u002BFC\u002B1s4jFyQ==",
     "RefreshTokenExpiry": "2026-11-03T12:23:36.0381188Z"
+  },
+  {
+    "Id": "0f54175a-43f2-4fc5-959c-0cb5d9eda862",
+    "FirstName": "sowmya",
+    "LastName": "sampathkumar",
+    "Email": "sowmya.sam@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEORD55/A4WICH2R0hfgqPsV14uSg1TFy3KZNyDcVYjvI/rLePw3l8NHYBJsMttA0xQ==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T09:53:16.6956812Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
   }
 ]

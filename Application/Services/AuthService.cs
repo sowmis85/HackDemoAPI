@@ -37,7 +37,7 @@ namespace HackDemoAPI.Application.Services
 
             if (exists)
                 throw new ApplicationException(
-                    "Email already exists");
+                    ValidationConstant.EmailExistsError);
 
             var user = new User
             {
@@ -58,7 +58,7 @@ namespace HackDemoAPI.Application.Services
             return new AuthResponse
             {
                 UserId = user.Id,
-                Message = "Registration successful"
+                Message = ValidationConstant.UserRegistrationSuccess
             };
         }
 
@@ -72,7 +72,7 @@ namespace HackDemoAPI.Application.Services
                     cancellationToken);
 
             if (user == null)
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException(ValidationConstant.InvalidCrendentials);
 
             bool validPassword =
                 _passwordHasher.Verify(
@@ -80,7 +80,7 @@ namespace HackDemoAPI.Application.Services
                     user.PasswordHash);
 
             if (!validPassword)
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException(ValidationConstant.InvalidCrendentials);
 
             return new LoginResponse
             {
