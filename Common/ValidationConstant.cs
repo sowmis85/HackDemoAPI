@@ -29,6 +29,10 @@ namespace HackDemoAPI.Common
         public const string TokenRefreshSuccess = "Token refreshed successfully";
         public const string UnExpectedRegistrationError = "An unexpected error occurred during registration";
         public const string ValidationError = "Validation failed";
+        public const string EmailRequired = "Email is required";
+        public const string NewPasswordRequired = "New password is required";
+        public const string PasswordUpdateSuccess = "Password updated successfully";
+        public const string EmailIdNotFound = "Email Id not found";
 
         //Error codes
         public static readonly string RELEASE = "RELEASE";
@@ -39,5 +43,6 @@ namespace HackDemoAPI.Common
         public static readonly string EMAIL_EXISTS= "EMAIL_EXISTS";
         public static readonly string  INVALID_REFRESH_TOKEN= "INVALID_REFRESH_TOKEN";
         public static readonly string MISSING_REFRESH_TOKEN = "MISSING_REFRESH_TOKEN";
+        public static readonly string EMAIL_NOT_FOUND = "EMAIL_NOT_FOUND";
     }
 }

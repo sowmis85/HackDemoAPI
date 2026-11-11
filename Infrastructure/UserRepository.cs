@@ -30,8 +30,7 @@ namespace HackDemoAPI.Infrastructure
 
             return users.FirstOrDefault(x =>
                 x.Email.Equals(
-                    email,
-                    StringComparison.OrdinalIgnoreCase));
+                    email, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken)

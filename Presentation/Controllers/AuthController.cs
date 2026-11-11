@@ -1,10 +1,12 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using ValidationException = HackDemoAPI.Application.Exceptions.ValidationException;
 
 namespace HackDemoAPI.Presentation.Controllers
 {
@@ -218,6 +220,64 @@ namespace HackDemoAPI.Presentation.Controllers
                     {
                         Success = false,
                         Message = ValidationConstant.UnExprectedRefreshError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                    });
+            }
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgetPwdRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .FirstOrDefault();
+                    return BadRequest(new AuthResponse
+                    {
+                        Success = false,
+                        Message = errors ?? ValidationConstant.InvalidLoginRequest,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
+                    });
+                }
+                var response = await _authService.ForgotPasswordAsync(request, cancellationToken);
+
+                return Ok(response);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
+                return BadRequest(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
+                });
+            }
+            catch(NotFoundException ex)
+            {
+                _logger.LogWarning(ValidationConstant.EmailIdNotFound + ": " + ex.Message);
+                return NotFound(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.EMAIL_NOT_FOUND
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ValidationConstant.InternalServerError + ": " + ex.Message);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new AuthResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.InternalServerError,
                         ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
                     });
             }

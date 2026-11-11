@@ -1,5 +1,6 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
@@ -130,6 +131,38 @@ namespace HackDemoAPI.Application.Services
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,
                 ExpiresAt = DateTime.UtcNow.AddHours(2)
+            };
+        }
+
+        public async Task<AuthResponse> ForgotPasswordAsync(ForgetPwdRequest request, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                throw new ValidationException(ValidationConstant.EmailRequired);
+            }
+
+            if (string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                throw new ValidationException(ValidationConstant.NewPasswordRequired);
+            }
+
+            var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+
+            if (user == null)
+            {
+                throw new NotFoundException(
+                    $"User with email '{request.Email}' not found.");
+            }
+
+            user.PasswordHash = _passwordHasher.Hash(request.NewPassword);
+
+            await _userRepository.UpdateAsync(user,
+                cancellationToken);
+
+            return new AuthResponse
+            {
+                Success = true,
+                Message = ValidationConstant.PasswordUpdateSuccess
             };
         }
     }

@@ -30,7 +30,7 @@ namespace HackDemoAPI.Presentation.Middleware
             }
             catch (NotFoundException ex)
             {
-                _logger.LogWarning(ex, ex.Message);
+                _logger.LogWarning(ex, "Not Found Error: {Message}", ex.Message);
 
                 await HandleExceptionAsync(context, StatusCodes.Status404NotFound, ex.Message);
             }
