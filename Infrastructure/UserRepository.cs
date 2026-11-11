@@ -1,4 +1,5 @@
 ﻿using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,7 @@ namespace HackDemoAPI.Infrastructure
 
             return users.FirstOrDefault(x =>
                 x.Email.Equals(
-                    email,
-                    StringComparison.OrdinalIgnoreCase));
+                    email, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken)

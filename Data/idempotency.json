@@ -1,0 +1,44 @@
+[
+  {
+    "IdempotencyKey": "\u00225e66c072-9d4d-4f59-a5b9-123456\u0022",
+    "EventId": "EVT1001",
+    "Operation": "RELEASE",
+    "CreatedOn": "2026-11-02T07:59:24.0337528Z"
+  },
+  {
+    "IdempotencyKey": "REG114f97555-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RELEASE",
+    "CreatedOn": "2026-11-02T10:44:52.6958762Z"
+  },
+  {
+    "IdempotencyKey": "REGbc5fed9bd-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RESERVE",
+    "CreatedOn": "2026-11-02T12:06:25.5099579Z"
+  },
+  {
+    "IdempotencyKey": "REGa40a7c13a-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RESERVE",
+    "CreatedOn": "2026-11-02T14:56:29.6015982Z"
+  },
+  {
+    "IdempotencyKey": "REG163f97537-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RESERVE",
+    "CreatedOn": "2026-11-02T14:56:58.5450922Z"
+  },
+  {
+    "IdempotencyKey": "REG089d86765-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RESERVE",
+    "CreatedOn": "2026-11-03T07:31:20.0785725Z"
+  },
+  {
+    "IdempotencyKey": "REG8010a93af-RESERVE",
+    "EventId": "EVT1001",
+    "Operation": "RESERVE",
+    "CreatedOn": "2026-11-03T08:08:05.0915748Z"
+  }
+]

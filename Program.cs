@@ -1,13 +1,27 @@
 
 using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
+using HackDemoAPI.Application.Interfaces.IService;
+using HackDemoAPI.Application.Interfaces.Repositories;
+using HackDemoAPI.Application.Interfaces.Services;
 using HackDemoAPI.Application.Services;
+using HackDemoAPI.Common;
 using HackDemoAPI.Infrastructure;
+using HackDemoAPI.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+if (string.IsNullOrEmpty(jwtKey) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
+{
+    throw new InvalidOperationException(ValidationConstant.JWTConfigValidation);
+}
 // 1. Add JWT Authentication services
 builder.Services.AddAuthentication(options =>
 {
@@ -21,9 +35,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
 });
 
@@ -31,13 +45,43 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+// Add Logging
+builder.Services.AddLogging(options =>
+{
+    options.AddConsole();
+    options.AddDebug();
+    // Consider Serilog for production
+});
+
+//Service registrations
+builder.Services.AddHttpClient<IAIService, AzureOpenAIService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ISeatService, SeatService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
+//Repository registrations
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddSingleton<IJsonFileHelper, JsonFileHelper>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
+builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
+builder.Services.AddScoped<IWorkflowRepository, WorkflowRepository>();
+//Helper
+builder.Services.AddSingleton<IJsonFileHelper, JsonFileHelper>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularPolicy",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
@@ -49,6 +93,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseCors("AngularPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
