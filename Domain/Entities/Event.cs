@@ -5,21 +5,20 @@ namespace HackDemoAPI.Domain.Entities
 {
     public class Event
     {
-        public string EventId { get; set; } = default!;
-        public string Title { get; set; } = default!;
-        public string Description { get; set; } = default!;
-        public string Category { get; set; } = default!;
-
+        public string EventId { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-
-        public string Status { get; set; } = default!;
-
+        public string Status { get; set; } = string.Empty;
         public int Capacity { get; set; }
         public int ReservedSeats { get; set; }
         public int AvailableSeats { get; set; }
+        public string OrganizerId { get; set; } = string.Empty;
 
-        public string OrganizerId { get; set; } = default!;       
+        public DateTimeOffset CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
     }
 
     public class Venue
