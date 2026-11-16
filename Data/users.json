@@ -26,7 +26,7 @@
     "FirstName": "sowmya",
     "LastName": "sampathkumar",
     "Email": "sowmya.sam@test.com",
-    "PasswordHash": "AQAAAAIAAYagAAAAEORD55/A4WICH2R0hfgqPsV14uSg1TFy3KZNyDcVYjvI/rLePw3l8NHYBJsMttA0xQ==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEFZXpZ9QUZC0L2aUuRhOVh9hUY1Kg0MZ2g8gmVynOx7rQrJKukvVFMrafp4t0M\u002BS6w==",
     "Role": "Admin",
     "CreatedOnUtc": "2026-11-10T09:53:16.6956812Z",
     "RefreshToken": "",
@@ -73,6 +73,39 @@
     "PasswordHash": "AQAAAAIAAYagAAAAEJywASnlkPO7o\u002BAeSPyWH/J6Fj8CkWD1xsDLLLEe8NOfo/tj/nJCwFtciIzt56bDnw==",
     "Role": "Admin",
     "CreatedOnUtc": "2026-11-10T12:49:38.2858299Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "f349d3a1-5542-4e83-86aa-0311e48c39b0",
+    "FirstName": "sowmya",
+    "LastName": "SDG",
+    "Email": "sowmya.hcl1@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEKLypwDsUVSrEaxj\u002BkK2VkJyD\u002Bb2CQhmKcNr47JMBrYXrEi2Ifk1l2oFPgmigxon4w==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-11T15:14:51.5520403Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "f2e90fd2-df3c-4965-afcd-9f1a9ebb8c8b",
+    "FirstName": "sowmya",
+    "LastName": "SDG",
+    "Email": "sowmya.hcl12@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEAxIyvdPEuugzpbWNHNKNZFiFBj0uM9nHRMr4gV3FJ60kJHurpRGSfmC3C7mk0nsSQ==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-11T15:15:21.5848076Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "35d0427c-ed37-4f81-ab8c-6f7dbf5013f4",
+    "FirstName": "sowmya",
+    "LastName": "sampath",
+    "Email": "sowmya.organiser@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEI1J\u002BAtbjRFFAuJ1rG4ipvbI5viUF4aXz1Q6TP2uwaR9dDgBhtM6UjzngdTKQ1NqUg==",
+    "Role": "Organizer",
+    "CreatedOnUtc": "2026-11-13T05:40:02.8048749Z",
     "RefreshToken": "",
     "RefreshTokenExpiry": "0001-01-01T00:00:00"
   }

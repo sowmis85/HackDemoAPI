@@ -36,11 +36,12 @@ namespace HackDemoAPI.Application.Services
                 EventId = eventData.EventId,
                 Title = eventData.Title,
                 Description = eventData.Description,
-                Category = eventData.Category.ToString(),                
-                Capacity = eventData.Capacity,   
+                Category = eventData.Category.ToString(),
                 StartDate = eventData.StartDate,
                 EndDate = eventData.EndDate,
-                ReservedSeats=eventData.ReservedSeats,
+                Status=eventData.Status,
+                Capacity = eventData.Capacity,
+                ReservedSeats =eventData.ReservedSeats,
                 AvailableSeats =eventData.Capacity-eventData.ReservedSeats                   
             };
         }

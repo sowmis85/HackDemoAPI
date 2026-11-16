@@ -10,15 +10,36 @@ using HackDemoAPI.Infrastructure;
 using HackDemoAPI.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var jwtKey = builder.Configuration["Jwt:Key"];
+try
+{
+    var keyVaultUri = new Uri(builder.Configuration["KeyVault:VaultUri"]!);
+    var credential = new DefaultAzureCredential();
+    builder.Configuration.AddAzureKeyVault(keyVaultUri, credential);
+}
+catch (Azure.Identity.AuthenticationFailedException ex)
+{
+    Console.WriteLine($"Authentication failed: {ex.Message}");
+    throw;
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Key Vault connection failed: {ex.GetType().Name} - {ex.Message}");
+    throw;
+}
+// 2. Retrieve the JWT Signing Key loaded from Key Vault
+var jwtSigningKey = builder.Configuration["Jwt:SigningKey"]
+    ?? throw new InvalidOperationException("JWT Signing Key not found in Key Vault.");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
-if (string.IsNullOrEmpty(jwtKey) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
+if (string.IsNullOrEmpty(jwtSigningKey) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
 {
     throw new InvalidOperationException(ValidationConstant.JWTConfigValidation);
 }
@@ -37,7 +58,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey))
     };
 });
 
