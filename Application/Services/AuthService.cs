@@ -1,6 +1,9 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
+using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 using HackDemoAPI.Infrastructure;
@@ -25,7 +28,7 @@ namespace HackDemoAPI.Application.Services
         }
 
         public async Task<AuthResponse> RegisterAsync(
-            RegisterRequest request,
+            UserRegisterRequest request,
             CancellationToken cancellationToken)
         {
             var exists = await _userRepository
@@ -35,7 +38,7 @@ namespace HackDemoAPI.Application.Services
 
             if (exists)
                 throw new ApplicationException(
-                    "Email already exists");
+                    ValidationConstant.EmailExistsError);
 
             var user = new User
             {
@@ -56,7 +59,7 @@ namespace HackDemoAPI.Application.Services
             return new AuthResponse
             {
                 UserId = user.Id,
-                Message = "Registration successful"
+                Message = ValidationConstant.UserRegistrationSuccess
             };
         }
 
@@ -70,7 +73,7 @@ namespace HackDemoAPI.Application.Services
                     cancellationToken);
 
             if (user == null)
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException(ValidationConstant.InvalidCrendentials);
 
             bool validPassword =
                 _passwordHasher.Verify(
@@ -78,7 +81,7 @@ namespace HackDemoAPI.Application.Services
                     user.PasswordHash);
 
             if (!validPassword)
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException(ValidationConstant.InvalidCrendentials);
 
             return new LoginResponse
             {
@@ -128,6 +131,38 @@ namespace HackDemoAPI.Application.Services
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,
                 ExpiresAt = DateTime.UtcNow.AddHours(2)
+            };
+        }
+
+        public async Task<AuthResponse> ForgotPasswordAsync(ForgetPwdRequest request, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                throw new ValidationException(ValidationConstant.EmailRequired);
+            }
+
+            if (string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                throw new ValidationException(ValidationConstant.NewPasswordRequired);
+            }
+
+            var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+
+            if (user == null)
+            {
+                throw new NotFoundException(
+                    $"User with email '{request.Email}' not found.");
+            }
+
+            user.PasswordHash = _passwordHasher.Hash(request.NewPassword);
+
+            await _userRepository.UpdateAsync(user,
+                cancellationToken);
+
+            return new AuthResponse
+            {
+                Success = true,
+                Message = ValidationConstant.PasswordUpdateSuccess
             };
         }
     }

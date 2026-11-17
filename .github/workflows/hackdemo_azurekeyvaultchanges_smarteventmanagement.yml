@@ -1,0 +1,53 @@
+# Build and deploy the ASP.NET Core API to the SmartEventManagement Azure Web App.
+name: Build and deploy ASP.NET Core app to Azure Web App - SmartEventManagement
+
+on:
+  push:
+    branches:
+      - hackdemo_azurekeyvaultchanges
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Build
+        run: dotnet build HackDemoAPI.csproj --configuration Release
+
+      - name: Publish
+        run: dotnet publish HackDemoAPI.csproj --configuration Release --no-build --output "${{ runner.temp }}/myapp"
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{ runner.temp }}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Download deployment artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: .
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: SmartEventManagement
+          slot-name: Production
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BBBA2CC7579C45FAB4B0062F487CB76F }}

@@ -37,18 +37,20 @@
         };
             // 2. Fetch keys from configuration
             
-            var jwtKey = _configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(jwtKey))
+            var jwtSigningKey = _configuration["Jwt:SigningKey"];
+            if (string.IsNullOrEmpty(jwtSigningKey))
             {
                 throw new InvalidOperationException("JWT key is not configured.");
             }
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var jwtIssuer = _configuration["Jwt:Issuer"];
+            var jwtAudience = _configuration["Jwt:Audience"];
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: jwtIssuer,
+                audience: jwtAudience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: credentials);

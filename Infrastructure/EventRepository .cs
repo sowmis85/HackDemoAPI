@@ -4,6 +4,9 @@
     using Domain.Entities;
     using HackDemoAPI.Application.DTO.Events;
     using HackDemoAPI.Application.DTO.Requests;
+    using HackDemoAPI.Application.Exceptions;
+    using HackDemoAPI.Application.Interfaces.IRepository;
+    using HackDemoAPI.Common;
     using Microsoft.Extensions.Logging;
     using System.Threading;
 
@@ -130,13 +133,11 @@
         {
             var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
 
-            var existingEvent = events.FirstOrDefault(x =>
-                x.EventId == eventItem.EventId);
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventItem.EventId, StringComparison.OrdinalIgnoreCase));
 
             if (existingEvent is null)
             {
-                throw new KeyNotFoundException(
-                    "Event not found");
+                throw new NotFoundException(ValidationConstant.EventNotFound);
             }
 
             existingEvent.Title = eventItem.Title;
@@ -146,6 +147,9 @@
             existingEvent.EndDate = eventItem.EndDate;
             existingEvent.Capacity = eventItem.Capacity;
             existingEvent.AvailableSeats = eventItem.AvailableSeats;
+            existingEvent.Capacity = eventItem.Capacity;
+            existingEvent.AvailableSeats = eventItem.AvailableSeats;
+            existingEvent.Status = eventItem.Status;
 
             await _jsonFileHelper.WriteAsync(
                 _filePath,

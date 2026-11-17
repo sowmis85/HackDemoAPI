@@ -7,7 +7,10 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5114",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_TENANT_ID": "7e7c11bb-da78-4e62-833c-ea6dafdafd89",
+        "AZURE_CLIENT_ID": "cfa38768-74dd-473c-b283-9bbdc45dc4d3",
+        "AZURE_CLIENT_SECRET": "tSf8Q~KwSXn4Qz.I5TPQFC1XAn2ToDDVrkutecej"
       }
     },
     "https": {
@@ -16,7 +19,10 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7055;http://localhost:5114",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_TENANT_ID": "7e7c11bb-da78-4e62-833c-ea6dafdafd89",
+        "AZURE_CLIENT_ID": "cfa38768-74dd-473c-b283-9bbdc45dc4d3",
+        "AZURE_CLIENT_SECRET": "tSf8Q~KwSXn4Qz.I5TPQFC1XAn2ToDDVrkutecej"
       }
     }
   }
