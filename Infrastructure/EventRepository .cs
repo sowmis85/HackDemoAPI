@@ -146,7 +146,7 @@
             existingEvent.StartDate = eventItem.StartDate;
             existingEvent.EndDate = eventItem.EndDate;
             existingEvent.Capacity = eventItem.Capacity;
-            existingEvent.AvailableSeats = eventItem.AvailableSeats;
+            existingEvent.ReservedSeats = eventItem.ReservedSeats;
             existingEvent.Capacity = eventItem.Capacity;
             existingEvent.AvailableSeats = eventItem.AvailableSeats;
             existingEvent.Status = eventItem.Status;

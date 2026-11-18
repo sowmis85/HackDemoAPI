@@ -8,8 +8,8 @@
     "EndDate": "2026-12-20T12:00:00+05:30",
     "Status": "Published",
     "Capacity": 200,
-    "ReservedSeats": 100,
-    "AvailableSeats": 100,
+    "ReservedSeats": 66,
+    "AvailableSeats": 134,
     "OrganizerId": "USR2001",
     "CreatedDate": "2026-11-15T09:00:00+05:30",
     "CreatedBy": "admin@smartevent.test.com"

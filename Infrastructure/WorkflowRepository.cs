@@ -1,6 +1,9 @@
-﻿using HackDemoAPI.Application.Interfaces;
+﻿using HackDemoAPI.Application.Exceptions;
+using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Application.Interfaces.Repositories;
+using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HackDemoAPI.Infrastructure
 {
@@ -42,6 +45,36 @@ namespace HackDemoAPI.Infrastructure
                     cancellationToken);
 
             workflows.Add(workflowInstance);
+
+            await _jsonFileHelper.WriteAsync(
+                _filePath,
+                workflows,
+                cancellationToken);
+        }
+
+        public async Task UpdateAsync(WorkflowInstance workflowInstance, CancellationToken cancellationToken)
+        {
+            if (workflowInstance == null)
+            {
+                throw new ArgumentNullException(nameof(workflowInstance));
+            }            
+
+            var workflows = await _jsonFileHelper.ReadAsync<WorkflowInstance>(
+                _filePath,
+                cancellationToken);
+           
+            var existingWorkflow = workflows.FirstOrDefault(x => x.RegistrationId.Equals(workflowInstance.RegistrationId, StringComparison.OrdinalIgnoreCase));
+            if (existingWorkflow is null)
+            {
+                throw new NotFoundException(ValidationConstant.WorkflowNotFound);
+            }
+
+            // Update the LastUpdatedOn timestamp if not already set by caller
+            existingWorkflow.LastUpdatedOn = workflowInstance.LastUpdatedOn == default
+                ? DateTime.UtcNow
+                : workflowInstance.LastUpdatedOn;
+            existingWorkflow.CurrentState = workflowInstance.CurrentState;
+            existingWorkflow.RegistrationId = workflowInstance.RegistrationId;           
 
             await _jsonFileHelper.WriteAsync(
                 _filePath,
