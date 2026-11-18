@@ -45,6 +45,7 @@ namespace HackDemoAPI.Infrastructure
             {
                 existing.Operation = record.Operation;
                 existing.EventId = record.EventId;
+                existing.CreatedOn = record.CreatedOn; 
             }
             else
             {

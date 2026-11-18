@@ -10,93 +10,23 @@
     "CreatedOn": "2026-11-02T10:44:56.0004985Z"
   },
   {
-    "RegistrationId": "REGbc5fed9bd",
-    "EventId": "EVT1002",
-    "AttendeeName": "Alice Smith",
-    "AttendeeEmail": "Alice@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WF3f31be4935",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-02T12:06:25.5279194Z"
-  },
-  {
-    "RegistrationId": "REGa40a7c13a",
+    "RegistrationId": "REG1b50b2c44",
     "EventId": "EVT1001",
-    "AttendeeName": "Sam Jude",
-    "AttendeeEmail": "sam@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WFe3e47489dd",
+    "AttendeeName": "SLM Sam",
+    "AttendeeEmail": "slmsam@test.com",
+    "Quantity": 10,
+    "WorkflowInstanceId": "WF2fcd394138",
     "Status": "Pending",
-    "CreatedOn": "2026-11-02T14:56:32.1630161Z"
+    "CreatedOn": "2026-11-17T12:39:13.1399483Z"
   },
   {
-    "RegistrationId": "REG163f97537",
-    "EventId": "EVT1001",
-    "AttendeeName": "Sow Sam",
-    "AttendeeEmail": "sow@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WFa61ccf9449",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-02T14:56:58.5495143Z"
-  },
-  {
-    "RegistrationId": "REG089d86765",
-    "EventId": "EVT1001",
-    "AttendeeName": "Vis Sam",
-    "AttendeeEmail": "vvsam@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WF36f265474b",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-03T07:31:20.0901216Z"
-  },
-  {
-    "RegistrationId": "REG8010a93af",
+    "RegistrationId": "REG634547a62",
     "EventId": "EVT1001",
     "AttendeeName": "SS Sam",
     "AttendeeEmail": "sssam@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WFbf58c5a9ec",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-03T08:08:05.1022927Z"
-  },
-  {
-    "RegistrationId": "REGbecb0f24d",
-    "EventId": "EVT1001",
-    "AttendeeName": "sowmya",
-    "AttendeeEmail": "sowmya.sam@test.com",
     "Quantity": 10,
-    "WorkflowInstanceId": "WF35778bb766",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-13T04:55:56.8655677Z"
-  },
-  {
-    "RegistrationId": "REG01ad5cd8d",
-    "EventId": "EVT1001",
-    "AttendeeName": "Sowmya",
-    "AttendeeEmail": "sowmya.attendee@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WF4a2f11ed1b",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-13T09:09:51.0947174Z"
-  },
-  {
-    "RegistrationId": "REG1d92719bb",
-    "EventId": "EVT1001",
-    "AttendeeName": "Sowmya",
-    "AttendeeEmail": "sowmya.attendeetest@test.com",
-    "Quantity": 1,
-    "WorkflowInstanceId": "WF8e1e1f3a5f",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-13T09:10:20.4838793Z"
-  },
-  {
-    "RegistrationId": "REG5fcb45321",
-    "EventId": "EVT1003",
-    "AttendeeName": "SEM user",
-    "AttendeeEmail": "sem.attendee@test.com",
-    "Quantity": 5,
-    "WorkflowInstanceId": "WFada113fd29",
-    "Status": "Pending",
-    "CreatedOn": "2026-11-16T07:14:33.0946213Z"
+    "WorkflowInstanceId": "WF7d69ca8264",
+    "Status": "Reserved",
+    "CreatedOn": "2026-11-17T12:39:13.1399483Z"
   }
 ]
