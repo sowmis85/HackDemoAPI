@@ -1,0 +1,32 @@
+[
+  {
+    "RegistrationId": "REG114f97555",
+    "EventId": "EVT1001",
+    "AttendeeName": "John Smith",
+    "AttendeeEmail": "john@test.com",
+    "Quantity": 1,
+    "WorkflowInstanceId": "WF93d6080d15",
+    "Status": "Cancelled",
+    "CreatedOn": "2026-11-02T10:44:56.0004985Z"
+  },
+  {
+    "RegistrationId": "REG1b50b2c44",
+    "EventId": "EVT1001",
+    "AttendeeName": "SLM Sam",
+    "AttendeeEmail": "slmsam@test.com",
+    "Quantity": 10,
+    "WorkflowInstanceId": "WF2fcd394138",
+    "Status": "Pending",
+    "CreatedOn": "2026-11-17T12:39:13.1399483Z"
+  },
+  {
+    "RegistrationId": "REG634547a62",
+    "EventId": "EVT1001",
+    "AttendeeName": "SS Sam",
+    "AttendeeEmail": "sssam@test.com",
+    "Quantity": 10,
+    "WorkflowInstanceId": "WF7d69ca8264",
+    "Status": "Reserved",
+    "CreatedOn": "2026-11-17T12:39:13.1399483Z"
+  }
+]
