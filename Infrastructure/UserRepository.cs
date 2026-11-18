@@ -1,4 +1,5 @@
 ﻿using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
