@@ -73,6 +73,8 @@ builder.Services.AddLogging(options =>
     options.AddDebug();
     // Consider Serilog for production
 });
+// Add HttpClient for Durable Functions
+builder.Services.AddHttpClient<IDurableFunctionClient, DurableFunctionClient>();
 
 //Service registrations
 builder.Services.AddHttpClient<IAIService, AzureOpenAIService>();
@@ -81,6 +83,9 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IWorkflowService, WorkflowService>();
+// Register the Durable Function Client
+builder.Services.AddScoped<IDurableFunctionClient, DurableFunctionClient>();
+
 //Repository registrations
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

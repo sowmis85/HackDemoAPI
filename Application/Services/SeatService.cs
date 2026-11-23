@@ -1,23 +1,31 @@
-﻿using HackDemoAPI.Application.DTO.Requests;
+﻿using Azure.Core;
+using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Exceptions;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
+using HackDemoAPI.Application.Interfaces.Repositories;
 using HackDemoAPI.Common;
+using HackDemoAPI.Domain.Entities;
 
 namespace HackDemoAPI.Application.Services
 {
     public class SeatService : ISeatService
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IRegistrationRepository _registrationRepository;
         private readonly IIdempotencyRepository _idempotencyRepository;
+        private readonly IWorkflowRepository _workflowRepository;
 
         public SeatService(
             IEventRepository eventRepository,
-            IIdempotencyRepository idempotencyRepository)
+            IRegistrationRepository registrationRepository,
+            IIdempotencyRepository idempotencyRepository, IWorkflowRepository workflowRepository)
         {
             _eventRepository = eventRepository;
+            _registrationRepository = registrationRepository;
             _idempotencyRepository = idempotencyRepository;
+            _workflowRepository = workflowRepository;
         }
 
         public async Task<SeatReservationResponse> ReserveAsync(string eventId, string idempotencyKey, SeatRequest request, CancellationToken cancellationToken)
@@ -30,24 +38,20 @@ namespace HackDemoAPI.Application.Services
             }
 
             var eventEntity = context.Event;
+            // Check if there are enough available seats for the requested quantity
+            if (eventEntity.AvailableSeats < request.Quantity)
+            {  
+                await UpdateRegistrationAndWorkflowAsync(eventId, idempotencyKey, request.RegistrationId, ValidationConstant.Waitlisted, cancellationToken);
 
-            var availableSeats = eventEntity.Capacity - eventEntity.ReservedSeats;
-
-            if (availableSeats < request.Quantity)
                 throw new ValidationException(ValidationConstant.NoSeatsAvailable);
+            }                
 
             eventEntity.ReservedSeats += request.Quantity;
-
+            eventEntity.AvailableSeats = eventEntity.Capacity - eventEntity.ReservedSeats;
+            //update the event with new reserved seats and available seats
             await _eventRepository.UpdateAsync(eventEntity, cancellationToken);
 
-            await _idempotencyRepository.UpsertAsync(new IdempotencyRecord
-                {
-                    IdempotencyKey = idempotencyKey,
-                    EventId = eventId,
-                    Operation = ValidationConstant.RESERVE,
-                    CreatedOn = DateTime.UtcNow
-                },
-                cancellationToken);
+            await UpdateRegistrationAndWorkflowAsync(eventId, idempotencyKey, request.RegistrationId, ValidationConstant.Reserved, cancellationToken);           
 
             return new SeatReservationResponse
             {
@@ -56,6 +60,37 @@ namespace HackDemoAPI.Application.Services
                 AvailableSeats = eventEntity.Capacity - eventEntity.ReservedSeats,
                 Status = ValidationConstant.Reserved
             };
+        }
+
+        private async Task UpdateRegistrationAndWorkflowAsync(string eventId, string idempotencyKey, string registrationId, string status, CancellationToken cancellationToken)
+        {
+            await _idempotencyRepository.UpsertAsync(new IdempotencyRecord
+            {
+                IdempotencyKey = idempotencyKey,
+                EventId = eventId,
+                Operation = status,
+                CreatedOn = DateTime.UtcNow
+            },
+              cancellationToken);
+
+            // If the status is "Released", we change it to "Cancelled" for the registration and workflow update
+            if (status.ToLower().Equals(ValidationConstant.Released))
+                status = ValidationConstant.Cancelled;
+
+            //update the registration with reserved status
+            await _registrationRepository.UpdateAsync(new Registration
+            {
+                RegistrationId = registrationId,
+                Status = status
+            },
+            cancellationToken);
+
+            await _workflowRepository.UpdateAsync(new WorkflowInstance
+            {
+                RegistrationId = registrationId,
+                CurrentState = status,
+                LastUpdatedOn = DateTime.UtcNow
+            }, cancellationToken);
         }
 
         public async Task<SeatReservationResponse> ReleaseAsync(string eventId, string idempotencyKey, SeatRequest request,
@@ -71,18 +106,11 @@ namespace HackDemoAPI.Application.Services
             var eventEntity = context.Event;
 
             eventEntity.ReservedSeats = Math.Max(eventEntity.ReservedSeats - request.Quantity, 0);
+            eventEntity.AvailableSeats = eventEntity.Capacity - eventEntity.ReservedSeats;
 
             await _eventRepository.UpdateAsync(eventEntity,cancellationToken);
 
-            await _idempotencyRepository.UpsertAsync(
-                new IdempotencyRecord
-                {
-                    IdempotencyKey = idempotencyKey,
-                    EventId = eventId,
-                    Operation = ValidationConstant.RELEASE,
-                    CreatedOn = DateTime.UtcNow
-                },
-                cancellationToken);
+            await UpdateRegistrationAndWorkflowAsync(eventId, idempotencyKey, request.RegistrationId, ValidationConstant.Released, cancellationToken);
 
             return new SeatReservationResponse
             {

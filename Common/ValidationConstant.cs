@@ -16,6 +16,9 @@ namespace HackDemoAPI.Common
         public const string AlreadyProcessed = "Already Processed";
         public const string Reserved = "Reserved";
         public const string Released = "Released";
+        public const string Waitlisted = "Waitlisted";
+        public const string Confirmed= "Confirmed";
+        public const string Cancelled= "Cancelled";
         public const string EventNotFound = "Event not found";
         public const string NoSeatsAvailable = "No Seats Available";
         public const string ReservationNotFound = "Reservation Not Found";

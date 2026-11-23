@@ -1,5 +1,7 @@
-﻿using HackDemoAPI.Application.Interfaces;
+﻿using Azure.Core;
+using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Application.Interfaces.IRepository;
+using HackDemoAPI.Common;
 using HackDemoAPI.Domain.Entities;
 
 namespace HackDemoAPI.Infrastructure
@@ -73,20 +75,17 @@ namespace HackDemoAPI.Infrastructure
         {
             var registrations =
                 await _jsonFileHelper.ReadAsync<Registration>(
-                    _filePath,
-                    cancellationToken);
+                    _filePath, cancellationToken);
 
-            var existing = registrations.FirstOrDefault(x =>
+            var existingRegistration = registrations.FirstOrDefault(x =>
                 x.RegistrationId == registration.RegistrationId);
 
-            if (existing == null)
+            if (existingRegistration == null)
             {
                 return;
             }
-
-            var index = registrations.IndexOf(existing);
-
-            registrations[index] = registration;
+           existingRegistration.Status=registration.Status;
+           existingRegistration.RegistrationId=registration.RegistrationId;
 
             await _jsonFileHelper.WriteAsync(
                 _filePath,

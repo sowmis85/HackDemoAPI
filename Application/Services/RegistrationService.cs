@@ -1,6 +1,7 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 using HackDemoAPI.Application.Exceptions;
+using HackDemoAPI.Application.Interfaces;
 using HackDemoAPI.Application.Interfaces.IRepository;
 using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Application.Interfaces.Repositories;
@@ -18,14 +19,16 @@ namespace HackDemoAPI.Application.Services
         private readonly IEventRepository _eventRepository;
         private readonly IWorkflowRepository _workflowRepository;
         private readonly ISeatService _seatService;
+        private readonly IDurableFunctionClient _durableFunctionClient;
 
         public RegistrationService(
-            IRegistrationRepository registrationRepository, IEventRepository eventRepository, IWorkflowRepository workflowRepository, ISeatService seatService)
+            IRegistrationRepository registrationRepository, IEventRepository eventRepository, IWorkflowRepository workflowRepository, ISeatService seatService, IDurableFunctionClient durableFunctionClient)
         {
             _registrationRepository = registrationRepository;
             _eventRepository = eventRepository;
             _seatService = seatService;
             _workflowRepository = workflowRepository;
+            _durableFunctionClient = durableFunctionClient;
         }
 
         public async Task<EventRegistrationResponse> RegisterAsync(string eventId, EventRegistrationRequest request, CancellationToken cancellationToken)
@@ -39,17 +42,9 @@ namespace HackDemoAPI.Application.Services
                 $"WF{Guid.NewGuid():N}"[..12];
 
             var idempotencyKey =
-                $"{registrationId}-RESERVE";
+                $"{eventId}-{registrationId}-RESERVE";
 
-            await _seatService.ReserveAsync(
-                eventId,
-                idempotencyKey,
-                new SeatRequest
-                {
-                    RegistrationId = registrationId,
-                    Quantity = request.Quantity
-                },
-                cancellationToken);
+            
             //registration creation
             var registration = new Registration
             {
@@ -59,7 +54,7 @@ namespace HackDemoAPI.Application.Services
                 AttendeeEmail = request.AttendeeEmail,
                 Quantity = request.Quantity,
                 WorkflowInstanceId = workflowInstanceId,
-                Status = "Pending",
+                Status = "Started",
                 CreatedOn = DateTime.UtcNow
             };
 
@@ -81,6 +76,14 @@ namespace HackDemoAPI.Application.Services
                 workflow,
                 cancellationToken);
 
+            // Start the registration orchestrator via HTTP starter function
+            var durableResponse = await _durableFunctionClient.StartRegistrationOrchestratorAsync(
+                eventId,
+                request.AttendeeEmail,
+                registrationId,
+                request.Quantity,
+                cancellationToken);
+
             return new EventRegistrationResponse
             {
                 RegistrationId = registrationId,
@@ -89,8 +92,10 @@ namespace HackDemoAPI.Application.Services
                 AttendeeName = registration.AttendeeName,
                 AttendeeEmail = registration.AttendeeEmail,
                 Quantity = registration.Quantity,
-                CreatedOn=registration.CreatedOn,
-                Status = "Pending"
+                CreatedOn = registration.CreatedOn,
+                Status = "In Progress",
+                InstanceStatusUri = durableResponse.StatusQueryGetUri,
+                InstanceTerminateUri = durableResponse.TerminatePostUri
             };
         }
 

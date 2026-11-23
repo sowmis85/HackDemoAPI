@@ -17,5 +17,10 @@
         public string Status { get; set; } = string.Empty;
 
         public DateTime CreatedOn { get; set; }
+
+        public string InstanceStatusUri { get; set; } = string.Empty;
+
+        public string InstanceTerminateUri { get; set; } = string.Empty;
+
     }
 }
