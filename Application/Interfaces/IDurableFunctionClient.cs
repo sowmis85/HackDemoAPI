@@ -8,6 +8,7 @@ namespace HackDemoAPI.Application.Interfaces
          string eventId,
          string userId,
          string registrationId,
+         int  quantity,
          CancellationToken cancellationToken);
     }
 }

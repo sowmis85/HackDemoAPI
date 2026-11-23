@@ -81,6 +81,7 @@ namespace HackDemoAPI.Application.Services
                 eventId,
                 request.AttendeeEmail,
                 registrationId,
+                request.Quantity,
                 cancellationToken);
 
             return new EventRegistrationResponse

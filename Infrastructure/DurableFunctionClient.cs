@@ -18,6 +18,7 @@ namespace HackDemoAPI.Infrastructure
                 string eventId,
                 string userId,
                 string registrationId,
+                int quantity,
                 CancellationToken cancellationToken)
             
         
@@ -29,7 +30,8 @@ namespace HackDemoAPI.Infrastructure
                 {
                     eventId,
                     userId,
-                    registrationId
+                    registrationId,
+                    quantity
                 };
 
                 var content = new StringContent(
