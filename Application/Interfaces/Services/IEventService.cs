@@ -2,7 +2,7 @@
 using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 
-namespace HackDemoAPI.Application.Interfaces
+namespace HackDemoAPI.Application.Interfaces.IService
 {
     public interface IEventService
     {

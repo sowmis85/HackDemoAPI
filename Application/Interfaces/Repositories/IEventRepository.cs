@@ -2,7 +2,7 @@
 using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Domain.Entities;
 
-namespace HackDemoAPI.Application.Interfaces
+namespace HackDemoAPI.Application.Interfaces.IRepository
 {
     public interface IEventRepository
     {
