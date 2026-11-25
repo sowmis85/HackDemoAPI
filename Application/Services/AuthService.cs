@@ -88,6 +88,8 @@ namespace HackDemoAPI.Application.Services
                 AccessToken =
                     _jwtGenerator.GenerateToken(user),
                 RefreshToken = _jwtGenerator.GenerateRefreshToken(),
+                UserId=user.Email,
+                Role=user.Role,
                 ExpiresAt = DateTime.UtcNow.AddHours(2)
             };
         }

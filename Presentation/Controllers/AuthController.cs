@@ -54,6 +54,8 @@ namespace HackDemoAPI.Presentation.Controllers
                     AccessToken = token.AccessToken,
                     RefreshToken = token.RefreshToken,
                     ExpiresAt = token.ExpiresAt,
+                    UserId=token.UserId,
+                    Role=token.Role,
                     Success = true,
                     Message = ValidationConstant.LoginSuccessMessage
                 });

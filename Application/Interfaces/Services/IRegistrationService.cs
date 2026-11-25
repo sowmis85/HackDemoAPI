@@ -10,5 +10,7 @@ namespace HackDemoAPI.Application.Interfaces.IService
         Task<EventRegistrationResponse> GetByIdAsync(string registrationId, CancellationToken cancellationToken);
 
         Task<CancelRegistrationResponse> CancelEventRegisterAsync(string registrationId, CancellationToken cancellationToken);
+
+        Task<IEnumerable<UserEventRegisResponse>> GetRegistrationsByUserIdAsync(string userId, CancellationToken cancellationToken);
     }
 }

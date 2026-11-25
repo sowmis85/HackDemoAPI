@@ -21,10 +21,7 @@ namespace HackDemoAPI.Presentation.Controllers
             CancellationToken cancellationToken)
         {
             var response =
-                await _registrationService.RegisterAsync(
-                    eventId,
-                    request,
-                    cancellationToken);
+                await _registrationService.RegisterAsync(eventId, request, cancellationToken);                      
 
             return Ok(response);
         }
@@ -49,6 +46,17 @@ namespace HackDemoAPI.Presentation.Controllers
                     cancellationToken);
 
             return Ok(response);
+        }
+
+        [HttpGet("user/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult>  GetRegistrationsByUserId(string userId, CancellationToken cancellationToken)
+        {
+            var registrations =
+                await _registrationService.GetRegistrationsByUserIdAsync(userId, cancellationToken);
+
+            return Ok(registrations);
         }
     }
 }

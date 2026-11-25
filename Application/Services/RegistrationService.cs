@@ -54,8 +54,9 @@ namespace HackDemoAPI.Application.Services
                 AttendeeEmail = request.AttendeeEmail,
                 Quantity = request.Quantity,
                 WorkflowInstanceId = workflowInstanceId,
-                Status = "Started",
-                CreatedOn = DateTime.UtcNow
+                Status = ValidationConstant.Initiated,
+                CreatedOn = DateTime.UtcNow,
+                CreatedBy=request.CreatedBy
             };
 
             await _registrationRepository.CreateAsync(
@@ -94,6 +95,7 @@ namespace HackDemoAPI.Application.Services
                 Quantity = registration.Quantity,
                 CreatedOn = registration.CreatedOn,
                 Status = "In Progress",
+                CreatedBy = registration.CreatedBy,
                 InstanceStatusUri = durableResponse.StatusQueryGetUri,
                 InstanceTerminateUri = durableResponse.TerminatePostUri
             };
@@ -192,7 +194,7 @@ namespace HackDemoAPI.Application.Services
                 throw new ValidationException(RegValidation.RegistrationAlreadyCancelled);
             }
 
-            string idempotentKey = registration.RegistrationId + "-RESERVE";
+            string idempotentKey = registration.EventId + "-" + registration.RegistrationId + "-RELEASE";
 
             await _seatService.ReleaseAsync(
                 registration.EventId,
@@ -216,6 +218,12 @@ namespace HackDemoAPI.Application.Services
                 Status = registration.Status,
                 Message = RegValidation.RegistrationCancelledSuccessfully
             };
+        }
+
+
+        public async Task<IEnumerable<UserEventRegisResponse>> GetRegistrationsByUserIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            return await _registrationRepository.GetRegistrationsByUserIdAsync(userId, cancellationToken);
         }
     }
 }

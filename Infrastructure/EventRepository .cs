@@ -80,6 +80,7 @@
                     Title = x.Title,
                     Description = x.Description,
                     Category = x.Category,
+                    Location=x.Location,
                     StartDate = x.StartDate,
                     Capacity = x.Capacity,
                     EndDate=x.EndDate,
@@ -146,8 +147,7 @@
             existingEvent.StartDate = eventItem.StartDate;
             existingEvent.EndDate = eventItem.EndDate;
             existingEvent.Capacity = eventItem.Capacity;
-            existingEvent.ReservedSeats = eventItem.ReservedSeats;
-            existingEvent.Capacity = eventItem.Capacity;
+            existingEvent.ReservedSeats = eventItem.ReservedSeats;         
             existingEvent.AvailableSeats = eventItem.AvailableSeats;
             existingEvent.Status = eventItem.Status;
 

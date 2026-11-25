@@ -4,6 +4,8 @@
     {
         public string? AccessToken { get; set; }
         public string? RefreshToken { get; set; }
+        public string? Role { get; set; }
+        public string? UserId { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public bool Success { get; set; } = true;
         public string? Message { get; set; }

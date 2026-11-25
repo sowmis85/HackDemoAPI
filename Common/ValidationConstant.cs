@@ -14,6 +14,7 @@ namespace HackDemoAPI.Common
         public const string EventUpdated = "Event updated successfully.";
         public const string EventDeleted = "Event deleted successfully.";
         public const string AlreadyProcessed = "Already Processed";
+        public const string Initiated = "Initiated";
         public const string Reserved = "Reserved";
         public const string Released = "Released";
         public const string Waitlisted = "Waitlisted";

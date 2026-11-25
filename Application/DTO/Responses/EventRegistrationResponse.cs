@@ -18,6 +18,8 @@
 
         public DateTime CreatedOn { get; set; }
 
+        public string CreatedBy { get; set; } = string.Empty;
+
         public string InstanceStatusUri { get; set; } = string.Empty;
 
         public string InstanceTerminateUri { get; set; } = string.Empty;

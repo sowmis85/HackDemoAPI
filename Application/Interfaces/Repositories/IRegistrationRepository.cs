@@ -1,4 +1,5 @@
-﻿using HackDemoAPI.Domain.Entities;
+﻿using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Domain.Entities;
 
 namespace HackDemoAPI.Application.Interfaces.IRepository
 {
@@ -13,5 +14,8 @@ namespace HackDemoAPI.Application.Interfaces.IRepository
         Task<Registration?> GetByEmailAndEventAsync(string email, string eventId, CancellationToken cancellationToken);
 
         Task UpdateAsync(Registration registration, CancellationToken cancellationToken);
+
+        Task<IEnumerable<UserEventRegisResponse>> GetRegistrationsByUserIdAsync(string userId, CancellationToken cancellationToken);
+        
     }
 }

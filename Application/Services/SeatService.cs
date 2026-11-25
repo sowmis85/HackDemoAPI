@@ -58,7 +58,7 @@ namespace HackDemoAPI.Application.Services
                 EventId = eventId,
                 ReservedSeats = eventEntity.ReservedSeats,
                 AvailableSeats = eventEntity.Capacity - eventEntity.ReservedSeats,
-                Status = ValidationConstant.Reserved
+                Status = ValidationConstant.Confirmed
             };
         }
 
@@ -73,10 +73,20 @@ namespace HackDemoAPI.Application.Services
             },
               cancellationToken);
 
-            // If the status is "Released", we change it to "Cancelled" for the registration and workflow update
+            await _workflowRepository.UpdateAsync(new WorkflowInstance
+            {
+                RegistrationId = registrationId,
+                CurrentState = status,
+                LastUpdatedOn = DateTime.UtcNow
+            }, cancellationToken);
+
+            // If the status is "Released", we change it to "Cancelled" for the registration status.
             if (status.ToLower().Equals(ValidationConstant.Released))
                 status = ValidationConstant.Cancelled;
 
+            // If the status is "Reserved", we change it to "Confirmed" for the registration status
+            if (status.ToLower().Equals(ValidationConstant.Reserved))
+                status = ValidationConstant.Confirmed;
             //update the registration with reserved status
             await _registrationRepository.UpdateAsync(new Registration
             {
@@ -84,13 +94,7 @@ namespace HackDemoAPI.Application.Services
                 Status = status
             },
             cancellationToken);
-
-            await _workflowRepository.UpdateAsync(new WorkflowInstance
-            {
-                RegistrationId = registrationId,
-                CurrentState = status,
-                LastUpdatedOn = DateTime.UtcNow
-            }, cancellationToken);
+            
         }
 
         public async Task<SeatReservationResponse> ReleaseAsync(string eventId, string idempotencyKey, SeatRequest request,
@@ -126,12 +130,7 @@ namespace HackDemoAPI.Application.Services
         private async Task<SeatOperationContext> ValidateAndGetEventAsync(string eventId, string idempotencyKey, string operation, CancellationToken cancellationToken)
         {
             var existingRecord = await _idempotencyRepository.ExistsAsync(idempotencyKey, operation, cancellationToken);
-            //Only for release this condition can be validated
-            if (operation.Equals(ValidationConstant.RELEASE) && existingRecord == null)
-            {
-                throw new NotFoundException(
-                    ValidationConstant.ReservationNotFound);
-            }
+         
             //For the same purpose of operation, validation should say already processed
             if (existingRecord != null && existingRecord.Operation == operation)
             {
