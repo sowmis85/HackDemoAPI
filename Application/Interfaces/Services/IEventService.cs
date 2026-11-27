@@ -15,5 +15,7 @@ namespace HackDemoAPI.Application.Interfaces.IService
         Task<CRUDEventResponse> UpdateAsync(string eventId, CRUDEventRequest request, CancellationToken cancellationToken);
 
         Task<CRUDEventResponse> DeleteAsync(string eventId, CancellationToken cancellationToken);
+
+        Task<CRUDEventResponse> PublishEventAsync(string eventId, CancellationToken cancellationToken);
     }
 }

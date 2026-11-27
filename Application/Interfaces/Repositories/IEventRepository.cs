@@ -17,5 +17,7 @@ namespace HackDemoAPI.Application.Interfaces.IRepository
         Task UpdateAsync(Event eventItem, CancellationToken cancellationToken);
 
         Task DeleteAsync(string eventId, CancellationToken cancellationToken);
+
+        Task PublishEventAsync(string eventId, CancellationToken cancellationToken);
     }
 }

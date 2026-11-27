@@ -28,5 +28,7 @@ namespace HackDemoAPI.Application.DTO.Requests
         [Range(1, 10000, ErrorMessage = "Capacity must be between 1 and 10,000")]
 
         public int Capacity { get; set; }
+
+        public string Location { get; set; } = string.Empty;
     }
 }

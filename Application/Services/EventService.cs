@@ -37,6 +37,7 @@ namespace HackDemoAPI.Application.Services
                 Title = eventData.Title,
                 Description = eventData.Description,
                 Category = eventData.Category.ToString(),
+                Location=eventData.Location,
                 StartDate = eventData.StartDate,
                 EndDate = eventData.EndDate,
                 Status=eventData.Status,
@@ -50,7 +51,11 @@ namespace HackDemoAPI.Application.Services
         {
             var events = await _repository.GetAllAsync(cancellationToken);
 
-            var eventId = $"EVT{events.Count + 1001}";
+            var nextNumber = events.Any()
+                             ? events.Max(e => int.Parse(e.EventId[3..])) + 1
+                             : 1001;
+
+            var eventId = $"EVT{nextNumber}";
 
             var newEvent = new Event
             {
@@ -58,9 +63,12 @@ namespace HackDemoAPI.Application.Services
                 Title = request.Title,
                 Description = request.Description,
                 Category = request.Category,
-                StartDate = request.StartDate,              
+                Location=request.Location,
+                StartDate = request.StartDate,  
+                EndDate=request.EndDate,
                 Capacity = request.Capacity,
                 AvailableSeats = request.Capacity,
+                Status=EventStatus.Draft.ToString(),
                 CreatedBy = createdBy,
                 CreatedDate = DateTime.UtcNow
             };
@@ -118,6 +126,17 @@ namespace HackDemoAPI.Application.Services
             {
                 EventId = eventId,
                 Message = ValidationConstant.EventDeleted ?? string.Empty
+            };
+        }
+
+        public async Task<CRUDEventResponse> PublishEventAsync(string eventId, CancellationToken cancellationToken)
+        {          
+            await _repository.PublishEventAsync(eventId, cancellationToken);
+
+            return new CRUDEventResponse
+            {
+                EventId = eventId,
+                Message = ValidationConstant.Published ?? string.Empty
             };
         }
     }

@@ -45,6 +45,7 @@ namespace HackDemoAPI.Presentation.Controllers
 
             return Ok(eventData);
         }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Organizer")]
         public async Task<IActionResult> Create(CRUDEventRequest request, CancellationToken cancellationToken)
@@ -83,6 +84,15 @@ namespace HackDemoAPI.Presentation.Controllers
         public async Task<IActionResult> Delete(string eventId, CancellationToken cancellationToken)
         {
             var response = await _eventService.DeleteAsync(eventId, cancellationToken);
+
+            return Ok(response);
+        }
+
+        [HttpPut("{eventId}/publish")]
+        [Authorize(Roles = "Admin,Organizer")]
+        public async Task<IActionResult> PublishEvent(string eventId, CancellationToken cancellationToken)
+        {
+            var response= await _eventService.PublishEventAsync(eventId, cancellationToken);
 
             return Ok(response);
         }

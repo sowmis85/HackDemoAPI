@@ -130,6 +130,26 @@
                 events,
                 cancellationToken);
         }
+
+        public async Task PublishEventAsync(string eventId, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventId, StringComparison.OrdinalIgnoreCase));
+
+            if (existingEvent is null)
+            {
+                throw new NotFoundException(ValidationConstant.EventNotFound);
+            }
+
+            existingEvent.Status = ValidationConstant.Published;
+            existingEvent.PublishedDate = DateTime.UtcNow;
+
+            await _jsonFileHelper.WriteAsync(
+               _filePath,
+               events,
+               cancellationToken);
+        }
         public async Task UpdateAsync(Event eventItem, CancellationToken cancellationToken)
         {
             var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
@@ -144,6 +164,7 @@
             existingEvent.Title = eventItem.Title;
             existingEvent.Description = eventItem.Description;
             existingEvent.Category = eventItem.Category;
+            existingEvent.Location = eventItem.Location;
             existingEvent.StartDate = eventItem.StartDate;
             existingEvent.EndDate = eventItem.EndDate;
             existingEvent.Capacity = eventItem.Capacity;
