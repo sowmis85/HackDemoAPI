@@ -1,8 +1,9 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
-using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.Interfaces.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace HackDemoAPI.Presentation.Controllers
@@ -44,17 +45,29 @@ namespace HackDemoAPI.Presentation.Controllers
 
             return Ok(eventData);
         }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Organizer")]
         public async Task<IActionResult> Create(CRUDEventRequest request, CancellationToken cancellationToken)
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value
-                        ?? User.FindFirst("email")?.Value
-                        ?? "Unknown";
+            try
+            {
+                var email = User.FindFirst(ClaimTypes.Email)?.Value
+                            ?? User.FindFirst("email")?.Value
+                            ?? "Unknown";
 
-            var response = await _eventService.CreateAsync(request, email, cancellationToken);
-
-            return Created($"/api/events/{response.EventId}", response);
+                var response = await _eventService.CreateAsync(request, email, cancellationToken);
+                return Created($"/api/events/{response.EventId}", response);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { error = "An unexpected error occurred." });
+            }
         }
 
         [HttpPut("{eventId}")]
@@ -71,6 +84,15 @@ namespace HackDemoAPI.Presentation.Controllers
         public async Task<IActionResult> Delete(string eventId, CancellationToken cancellationToken)
         {
             var response = await _eventService.DeleteAsync(eventId, cancellationToken);
+
+            return Ok(response);
+        }
+
+        [HttpPut("{eventId}/publish")]
+        [Authorize(Roles = "Admin,Organizer")]
+        public async Task<IActionResult> PublishEvent(string eventId, CancellationToken cancellationToken)
+        {
+            var response= await _eventService.PublishEventAsync(eventId, cancellationToken);
 
             return Ok(response);
         }

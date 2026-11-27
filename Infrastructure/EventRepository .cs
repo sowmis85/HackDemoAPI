@@ -4,6 +4,9 @@
     using Domain.Entities;
     using HackDemoAPI.Application.DTO.Events;
     using HackDemoAPI.Application.DTO.Requests;
+    using HackDemoAPI.Application.Exceptions;
+    using HackDemoAPI.Application.Interfaces.IRepository;
+    using HackDemoAPI.Common;
     using Microsoft.Extensions.Logging;
     using System.Threading;
 
@@ -77,6 +80,7 @@
                     Title = x.Title,
                     Description = x.Description,
                     Category = x.Category,
+                    Location=x.Location,
                     StartDate = x.StartDate,
                     Capacity = x.Capacity,
                     EndDate=x.EndDate,
@@ -126,26 +130,47 @@
                 events,
                 cancellationToken);
         }
+
+        public async Task PublishEventAsync(string eventId, CancellationToken cancellationToken)
+        {
+            var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
+
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventId, StringComparison.OrdinalIgnoreCase));
+
+            if (existingEvent is null)
+            {
+                throw new NotFoundException(ValidationConstant.EventNotFound);
+            }
+
+            existingEvent.Status = ValidationConstant.Published;
+            existingEvent.PublishedDate = DateTime.UtcNow;
+
+            await _jsonFileHelper.WriteAsync(
+               _filePath,
+               events,
+               cancellationToken);
+        }
         public async Task UpdateAsync(Event eventItem, CancellationToken cancellationToken)
         {
             var events = await _jsonFileHelper.ReadAsync<Event>(_filePath, cancellationToken);
 
-            var existingEvent = events.FirstOrDefault(x =>
-                x.EventId == eventItem.EventId);
+            var existingEvent = events.FirstOrDefault(x => x.EventId.Equals(eventItem.EventId, StringComparison.OrdinalIgnoreCase));
 
             if (existingEvent is null)
             {
-                throw new KeyNotFoundException(
-                    "Event not found");
+                throw new NotFoundException(ValidationConstant.EventNotFound);
             }
 
             existingEvent.Title = eventItem.Title;
             existingEvent.Description = eventItem.Description;
             existingEvent.Category = eventItem.Category;
+            existingEvent.Location = eventItem.Location;
             existingEvent.StartDate = eventItem.StartDate;
             existingEvent.EndDate = eventItem.EndDate;
             existingEvent.Capacity = eventItem.Capacity;
+            existingEvent.ReservedSeats = eventItem.ReservedSeats;         
             existingEvent.AvailableSeats = eventItem.AvailableSeats;
+            existingEvent.Status = eventItem.Status;
 
             await _jsonFileHelper.WriteAsync(
                 _filePath,

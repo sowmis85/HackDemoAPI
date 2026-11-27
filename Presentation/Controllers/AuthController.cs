@@ -1,56 +1,288 @@
 ﻿using HackDemoAPI.Application.DTO.Requests;
-using HackDemoAPI.Application.Interfaces;
+using HackDemoAPI.Application.DTO.Responses;
+using HackDemoAPI.Application.Exceptions;
+using HackDemoAPI.Application.Interfaces.IService;
 using HackDemoAPI.Common;
-using HackDemoAPI.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
+using System.ComponentModel.DataAnnotations;
+using ValidationException = HackDemoAPI.Application.Exceptions.ValidationException;
 
 namespace HackDemoAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController: ControllerBase
+    public class AuthController : ControllerBase
     {
-        //DI for configuration
-        private readonly IConfiguration _config;
         private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IConfiguration config, IAuthService authService)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
-            _config = config;
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Login(
+            [FromBody] LoginRequest loginRequest,
+            CancellationToken cancellationToken)
         {
-            var token = await _authService.LoginAsync(loginRequest, cancellationToken);             
-            return Ok(new { token });            
-        }      
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return BadRequest(new LoginResponse
+                    {
+                        Success = false,
+                        Message = errors ?? ValidationConstant.InvalidCrendentials,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
+                    });
+                }
+
+                var token = await _authService.LoginAsync(loginRequest, cancellationToken);
+
+                return Ok(new LoginResponse
+                {
+                    AccessToken = token.AccessToken,
+                    RefreshToken = token.RefreshToken,
+                    ExpiresAt = token.ExpiresAt,
+                    UserId=token.UserId,
+                    Role=token.Role,
+                    Success = true,
+                    Message = ValidationConstant.LoginSuccessMessage
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning($"Login failed: {ex.Message}");
+                return Unauthorized(new LoginResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.UNAUTHORIZED
+                });
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
+                return BadRequest(new LoginResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ValidationConstant.UnExpectedError + ": " + ex.Message);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new LoginResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.UnExpectedError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                    });
+            }
+        }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> Register(
+            [FromBody] UserRegisterRequest request,
+            CancellationToken cancellationToken)
         {
-            var result = await _authService.RegisterAsync(
-                request,
-                cancellationToken);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .FirstOrDefault();
 
-            return Ok(result);
+                    return BadRequest(new AuthResponse
+                    {
+                        Success = false,
+                        Message = errors ?? ValidationConstant.InvalidLoginRequest,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
+                    });
+                }
+
+                var result = await _authService.RegisterAsync(request, cancellationToken);
+
+                return Ok(new AuthResponse
+                {
+                    UserId = result.UserId,
+                    Message = result.Message,
+                    Success = true
+                });
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.EmailExistsError + ": " + ex.Message);
+                return Conflict(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.EMAIL_EXISTS
+                });
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
+                return BadRequest(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ValidationConstant.UnExpectedRegistrationError + ": " + ex.Message);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new AuthResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.UnExpectedRegistrationError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                    });
+            }
         }
 
         [HttpPost("refresh-token")]
         [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RefreshToken(
+            [FromBody] RefreshTokenRequest request,
+            CancellationToken cancellationToken)
         {
-            var result = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request?.RefreshToken))
+                {
+                    return BadRequest(new LoginResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.MissingRefreshToken,
+                        ErrorCode = ValidationConstant.MISSING_REFRESH_TOKEN
+                    });
+                }
 
-            return Ok(result);
+                var result = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+
+                return Ok(new LoginResponse
+                {
+                    AccessToken = result.AccessToken,
+                    RefreshToken = result.RefreshToken,
+                    ExpiresAt = result.ExpiresAt,
+                    Success = true,
+                    Message = ValidationConstant.TokenRefreshSuccess
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning(ValidationConstant.UnExprectedRefreshError + ": " + ex.Message);
+                return Unauthorized(new LoginResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.INVALID_REFRESH_TOKEN
+                });
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
+                return BadRequest(new LoginResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ValidationConstant.UnExprectedRefreshError + ": " + ex.Message);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new LoginResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.UnExprectedRefreshError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                    });
+            }
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgetPwdRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .FirstOrDefault();
+                    return BadRequest(new AuthResponse
+                    {
+                        Success = false,
+                        Message = errors ?? ValidationConstant.InvalidLoginRequest,
+                        ErrorCode = ValidationConstant.VALIDATION_ERROR
+                    });
+                }
+                var response = await _authService.ForgotPasswordAsync(request, cancellationToken);
+
+                return Ok(response);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ValidationConstant.ValidationError + ": " + ex.Message);
+                return BadRequest(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.VALIDATION_ERROR
+                });
+            }
+            catch(NotFoundException ex)
+            {
+                _logger.LogWarning(ValidationConstant.EmailIdNotFound + ": " + ex.Message);
+                return NotFound(new AuthResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    ErrorCode = ValidationConstant.EMAIL_NOT_FOUND
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ValidationConstant.InternalServerError + ": " + ex.Message);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new AuthResponse
+                    {
+                        Success = false,
+                        Message = ValidationConstant.InternalServerError,
+                        ErrorCode = ValidationConstant.INTERNAL_SERVER_ERROR
+                    });
+            }
         }
     }
 }

@@ -15,10 +15,98 @@
     "FirstName": "admin",
     "LastName": "smartevent",
     "Email": "admin@smartevent.test.com",
-    "PasswordHash": "AQAAAAIAAYagAAAAEDGPa7uPHd4K3BINc/qj5\u002BBHfEr38GMgspL8XcCTfa3LdzLVvG3QQHtuOaRC3Hhbpg==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEFabkNk8/Opnhs\u002ByocaTbIpyUILbV/kUbg76cIG0oQR45RZn9K2YZfueGw\u002Bv3E2FIw==",
     "Role": "Admin",
     "CreatedOnUtc": "0001-01-01T00:00:00",
     "RefreshToken": "1sD69DXeJ8cVWVFmSU\u002BpfivKj68yrTQjlN1j9cVKcMmPYuj11M/YDWRXD40xY7J2JQ2RbI3kwtd\u002BFC\u002B1s4jFyQ==",
     "RefreshTokenExpiry": "2026-11-03T12:23:36.0381188Z"
+  },
+  {
+    "Id": "0f54175a-43f2-4fc5-959c-0cb5d9eda862",
+    "FirstName": "sowmya",
+    "LastName": "sampathkumar",
+    "Email": "sowmya.sam@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEFZXpZ9QUZC0L2aUuRhOVh9hUY1Kg0MZ2g8gmVynOx7rQrJKukvVFMrafp4t0M\u002BS6w==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T09:53:16.6956812Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "4734781d-130d-47b3-82bf-11d1c166c076",
+    "FirstName": "sowmya",
+    "LastName": "sampath",
+    "Email": "sowmya.sampath@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEBeHRgsl2IJ/uV2gA8lKg/s\u002BN39J4o96jzkd5SwfDLQuNnN5awUDCJHOSfb9D8rKzg==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T12:26:14.6089279Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "be74e310-4a56-43e1-b654-24d2e4b85bbb",
+    "FirstName": "admin",
+    "LastName": "smartevent",
+    "Email": "admintest@smartevent.test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEJByChTwnPqC78rksRaIZK47OigALlDgmygzwl2vrMKzhShufojoiB/mArhEN9\u002B\u002BWg==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T12:28:34.1702583Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "4e1e59fc-a1b3-4ad4-a545-2a7db10d26cf",
+    "FirstName": "sowmya",
+    "LastName": "test",
+    "Email": "sowmya.hcl@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEOv2m6\u002By6Sw09IzBm3OAhLWpgAK0Qx63a2U5i3Wz/UpEe7LCGy3LbkHpGbNvJOxL4Q==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T12:38:50.3523243Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "17a75d8b-e213-42ff-af78-c1e6e6123fb6",
+    "FirstName": "hcl",
+    "LastName": "user",
+    "Email": "user.hcl@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEJywASnlkPO7o\u002BAeSPyWH/J6Fj8CkWD1xsDLLLEe8NOfo/tj/nJCwFtciIzt56bDnw==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-10T12:49:38.2858299Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "f349d3a1-5542-4e83-86aa-0311e48c39b0",
+    "FirstName": "sowmya",
+    "LastName": "SDG",
+    "Email": "sowmya.hcl1@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEKLypwDsUVSrEaxj\u002BkK2VkJyD\u002Bb2CQhmKcNr47JMBrYXrEi2Ifk1l2oFPgmigxon4w==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-11T15:14:51.5520403Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "f2e90fd2-df3c-4965-afcd-9f1a9ebb8c8b",
+    "FirstName": "sowmya",
+    "LastName": "SDG",
+    "Email": "sowmya.hcl12@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEAxIyvdPEuugzpbWNHNKNZFiFBj0uM9nHRMr4gV3FJ60kJHurpRGSfmC3C7mk0nsSQ==",
+    "Role": "Admin",
+    "CreatedOnUtc": "2026-11-11T15:15:21.5848076Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "35d0427c-ed37-4f81-ab8c-6f7dbf5013f4",
+    "FirstName": "sowmya",
+    "LastName": "sampath",
+    "Email": "sowmya.organiser@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEI1J\u002BAtbjRFFAuJ1rG4ipvbI5viUF4aXz1Q6TP2uwaR9dDgBhtM6UjzngdTKQ1NqUg==",
+    "Role": "Organizer",
+    "CreatedOnUtc": "2026-11-13T05:40:02.8048749Z",
+    "RefreshToken": "",
+    "RefreshTokenExpiry": "0001-01-01T00:00:00"
   }
 ]

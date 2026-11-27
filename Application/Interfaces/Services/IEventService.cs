@@ -2,7 +2,7 @@
 using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Application.DTO.Responses;
 
-namespace HackDemoAPI.Application.Interfaces
+namespace HackDemoAPI.Application.Interfaces.IService
 {
     public interface IEventService
     {
@@ -15,5 +15,7 @@ namespace HackDemoAPI.Application.Interfaces
         Task<CRUDEventResponse> UpdateAsync(string eventId, CRUDEventRequest request, CancellationToken cancellationToken);
 
         Task<CRUDEventResponse> DeleteAsync(string eventId, CancellationToken cancellationToken);
+
+        Task<CRUDEventResponse> PublishEventAsync(string eventId, CancellationToken cancellationToken);
     }
 }

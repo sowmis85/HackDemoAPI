@@ -2,7 +2,7 @@
 using HackDemoAPI.Application.DTO.Requests;
 using HackDemoAPI.Domain.Entities;
 
-namespace HackDemoAPI.Application.Interfaces
+namespace HackDemoAPI.Application.Interfaces.IRepository
 {
     public interface IEventRepository
     {
@@ -17,5 +17,7 @@ namespace HackDemoAPI.Application.Interfaces
         Task UpdateAsync(Event eventItem, CancellationToken cancellationToken);
 
         Task DeleteAsync(string eventId, CancellationToken cancellationToken);
+
+        Task PublishEventAsync(string eventId, CancellationToken cancellationToken);
     }
 }

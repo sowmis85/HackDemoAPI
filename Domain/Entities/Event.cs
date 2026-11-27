@@ -16,8 +16,9 @@ namespace HackDemoAPI.Domain.Entities
         public int ReservedSeats { get; set; }
         public int AvailableSeats { get; set; }
         public string OrganizerId { get; set; } = string.Empty;
-
+        public string Location { get; set; } = string.Empty;
         public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset PublishedDate { get; set; }
         public string? CreatedBy { get; set; }
     }
 
